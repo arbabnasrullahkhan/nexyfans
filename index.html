@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nexy Fans - Premium Video Social Platform</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts for Premium Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS resets and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light, soft premium background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            color: #1a1a1a;
+        }
+
+        /* Splash Container */
+        .splash-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* Logo Icon (SVG) */
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            border-radius: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #ffffff;
+        }
+
+        /* App Title */
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        /* App Subtitle */
+        .app-subtitle {
+            font-size: 14px;
+            color: #666666;
+            font-weight: 400;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        /* Modern subtle loading spinner */
+        .loader {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #1a1a1a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Smooth fade out when redirecting */
+        .fade-out {
+            animation: fadeOut 0.5s ease-in forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="splash-container" id="splash">
+        <!-- SVG Logo -->
+        <div class="logo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <!-- Premium Play Icon SVG -->
+                <path d="M8 5.14V18.86C8 19.75 8.97 20.29 9.72 19.82L20.59 13.06C21.28 12.63 21.28 11.64 20.59 11.21L9.72 4.45C8.97 3.98 8 4.52 8 5.14Z"/>
+            </svg>
+        </div>
+        
+        <h1 class="app-title">Nexy Fans</h1>
+        <p class="app-subtitle">Premium Video Community</p>
+
+        <div class="loader"></div>
+    </div>
+
+    <!-- JavaScript with Firebase Logic -->
+    <script type="module">
+        // Import Auth functions from Firebase CDN matching your version
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        // Import your configured Auth instance
+        import { auth } from "./imp/firebase-config.js";
+
+        // Wait a minimum amount of time to show the nice animation (e.g., 2 seconds)
+        const MIN_SPLASH_TIME = 2000;
+        const startTime = Date.now();
+
+        // Listen for Firebase Auth State
+        onAuthStateChanged(auth, (user) => {
+            const timeElapsed = Date.now() - startTime;
+            const timeLeft = Math.max(0, MIN_SPLASH_TIME - timeElapsed);
+
+            setTimeout(() => {
+                const splashEl = document.getElementById('splash');
+                splashEl.classList.add('fade-out');
+
+                // Wait for the fade out animation to finish before redirecting
+                setTimeout(() => {
+                    if (user) {
+                        // User is signed in, redirect to main feed
+                        window.location.replace("home.html");
+                    } else {
+                        // No user is signed in, redirect to welcome page
+                        window.location.replace("welcome.html");
+                    }
+                }, 500); // 500ms matches CSS fadeOut animation
+                
+            }, timeLeft);
+        });
+    </script>
+</body>
+</html>
