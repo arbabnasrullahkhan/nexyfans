@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Reels - Nexy Fans</title>
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000; /* Reels are always dark mode */
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Full Screen Scroll Container */
+        .reels-container {
+            height: 100vh;
+            width: 100vw;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory; /* Critical for TikTok effect */
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+
+        .reels-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar Chrome/Safari */
+        }
+
+        /* Individual Reel Section */
+        .reel-section {
+            height: 100vh;
+            width: 100vw;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Video Player */
+        .video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Fill screen */
+        }
+
+        /* Instagram Embed Style */
+        .ig-embed-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* UI Overlays */
+        .reel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow clicks to pass to video */
+            background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 100%);
+            z-index: 10;
+        }
+
+        /* Right Side Actions */
+        .side-actions {
+            position: absolute;
+            right: 12px;
+            bottom: 120px; /* Above nav dock */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn svg {
+            width: 26px;
+            height: 26px;
+            fill: #fff;
+        }
+
+        .action-item span {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .action-btn.liked svg {
+            fill: #ff2d55;
+        }
+
+        /* Bottom Info (Caption/User) */
+        .bottom-info {
+            position: absolute;
+            left: 16px;
+            bottom: 110px; /* Above nav dock */
+            max-width: 80%;
+            pointer-events: auto;
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .username {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .caption {
+            font-size: 14px;
+            line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Desktop Mode Sidebar Offset */
+        @media (min-width: 768px) {
+            body { padding-left: 80px; }
+        }
+
+        /* Loading Spinner */
+        .loader-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Dock -->
+    <div id="navDockContainer"></div>
+
+    <!-- Reels Container -->
+    <main class="reels-container" id="reelsContainer">
+        <!-- Videos will be injected here -->
+    </main>
+
+    <div class="loader-overlay" id="mainLoader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, query, orderBy, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db } from "./imp/firebase-config.js";
+
+        // 1. Auth Check
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.replace("login.html");
+            } else {
+                fetchReels();
+            }
+        });
+
+        // 2. Load Nav Dock
+        async function loadNavDock() {
+            try {
+                const response = await fetch('./imp/nav-dock-button.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    const container = document.getElementById('navDockContainer');
+                    container.innerHTML = html;
+                    // Force white icons for Reels black background
+                    container.querySelector('.nav-dock').style.background = 'rgba(0,0,0,0.8)';
+                    container.querySelector('.nav-dock').style.border = 'none';
+                    const scripts = container.getElementsByTagName('script');
+                    for (let script of scripts) eval(script.innerText);
+                }
+            } catch (e) {}
+        }
+        loadNavDock();
+
+        // 3. Fetch Data
+        async function fetchReels() {
+            const container = document.getElementById('reelsContainer');
+            const loader = document.getElementById('mainLoader');
+
+            try {
+                const q = query(collection(db, "videos"), orderBy("createdAt", "desc"), limit(20));
+                const querySnapshot = await getDocs(q);
+
+                loader.style.display = 'none';
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const reelEl = createReelElement(data);
+                    container.appendChild(reelEl);
+                });
+
+                setupObserver();
+
+            } catch (error) {
+                console.error("Error:", error);
+                loader.style.display = 'none';
+            }
+        }
+
+        // 4. Create UI Element
+        function createReelElement(data) {
+            const section = document.createElement('section');
+            section.className = 'reel-section';
+
+            // Logic: Check if it's an Instagram link or a Direct Video
+            let mediaHtml = '';
+            if (data.videoURL && data.videoURL.includes('instagram.com')) {
+                // Handle Instagram link (Admin feature)
+                // Note: IG embeds usually require their JS SDK, but we use an iframe placeholder logic
+                const igId = data.videoURL.split('/reels/')[1]?.split('/')[0] || 
+                             data.videoURL.split('/p/')[1]?.split('/')[0];
+                mediaHtml = `<iframe class="ig-embed-container" src="https://www.instagram.com/reels/${igId}/embed" frameborder="0"></iframe>`;
+            } else {
+                // Standard User Video
+                mediaHtml = `<video class="video-player" loop playsinline src="${data.videoURL}"></video>`;
+            }
+
+            section.innerHTML = `
+                ${mediaHtml}
+                <div class="reel-overlay">
+                    <div class="side-actions">
+                        <div class="action-item">
+                            <button class="action-btn" onclick="this.classList.toggle('liked')">
+                                <svg viewBox="0 0 24 24"><path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.46 20.04L12 21.35Z"/></svg>
+                            </button>
+                            <span>${data.likes || 0}</span>
+                        </div>
+                        <div class="action-item">
+                            <button class="action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M21 11.5C21 16.75 16.75 21 11.5 21C9.83 21 8.26 20.56 6.9 19.81L3 21L4.19 17.1C3.44 15.74 3 14.17 3 11.5C3 6.25 7.25 2 12.5 2C17.75 2 21 6.25 21 11.5Z"/></svg>
+                            </button>
+                            <span>Reply</span>
+                        </div>
+                        <div class="action-item">
+                            <button class="action-btn" onclick="shareReel('${data.videoURL}')">
+                                <svg viewBox="0 0 24 24"><path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.34C15.11 18.55 15.08 18.77 15.08 19C15.08 20.66 16.42 22 18.08 22C19.74 22 21.08 20.66 21.08 19C21.08 17.34 19.74 16.08 18 16.08Z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="user-row">
+                            <div class="user-avatar">${data.username?.charAt(0) || 'U'}</div>
+                            <span class="username">${data.username || 'User'}</span>
+                        </div>
+                        <p class="caption">${data.title || ''}</p>
+                    </div>
+                </div>
+            `;
+            return section;
+        }
+
+        // 5. Autoplay Logic
+        function setupObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target.querySelector('video');
+                    if (!video) return;
+
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+                });
+            }, { threshold: 0.8 });
+
+            document.querySelectorAll('.reel-section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // 6. Share Helper
+        window.shareReel = (url) => {
+            if (navigator.share) {
+                navigator.share({ title: 'Nexy Reel', url: url });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert("Link copied to clipboard!");
+            }
+        };
+
+    </script>
+</body>
+</html>
