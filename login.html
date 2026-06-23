@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login - Nexy Fans</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts for Premium Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfdfd;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-top: 12px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .back-btn:active {
+            background: #f1f5f9;
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #1a1a1a;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 4px rgba(26, 26, 26, 0.05);
+        }
+
+        .forgot-link {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 13px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: #ffffff;
+            margin-top: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-google {
+            background: #ffffff;
+            color: #1a1a1a;
+            border: 1.5px solid #e2e8f0;
+            margin-top: 16px;
+        }
+
+        .btn-google svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 32px 0;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .divider:not(:empty)::before {
+            margin-right: 16px;
+        }
+
+        .divider:not(:empty)::after {
+            margin-left: 16px;
+        }
+
+        /* Footer Links */
+        .footer-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .footer-link a {
+            color: #1a1a1a;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Error Message */
+        .error-msg {
+            color: #ef4444;
+            font-size: 13px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            background: #fef2f2;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        /* Loader inside button */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Back Button -->
+        <div class="top-nav">
+            <button class="back-btn" onclick="window.location.href='welcome.html'">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">Welcome Back</h1>
+            <p class="subtitle">Log in to continue to Nexy Fans.</p>
+        </div>
+
+        <div id="errorMessage" class="error-msg"></div>
+
+        <!-- Login Form -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <a href="forgot.html" class="forgot-link">Forgot?</a>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+                <span id="btnText">Log In</span>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
+        </form>
+
+        <div class="divider">OR</div>
+
+        <!-- Google Auth Button -->
+        <button class="btn btn-google" id="googleBtn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+        </button>
+
+        <div class="footer-link">
+            Don't have an account? <a href="register.html">Sign Up</a>
+        </div>
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { signInWithEmailAndPassword, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db, googleProvider } from "./imp/firebase-config.js";
+
+        // UI Elements
+        const loginForm = document.getElementById('loginForm');
+        const googleBtn = document.getElementById('googleBtn');
+        const errorMsg = document.getElementById('errorMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        // Show Error Helper
+        function showError(message) {
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            setLoading(false);
+        }
+
+        // Loading State Helper
+        function setLoading(isLoading) {
+            if(isLoading) {
+                btnText.style.display = 'none';
+                btnSpinner.style.display = 'block';
+                submitBtn.disabled = true;
+            } else {
+                btnText.style.display = 'block';
+                btnSpinner.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Handle Email/Password Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMsg.style.display = 'none';
+            setLoading(true);
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                
+                // Redirect to Home feed on success
+                window.location.replace("home.html");
+                
+            } catch (error) {
+                let niceError = "Login failed. Please check your credentials.";
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    niceError = "Invalid email or password.";
+                }
+                showError(niceError);
+            }
+        });
+
+        // Handle Google Auth (Also handles user creation if they log in without registering first)
+        googleBtn.addEventListener('click', async () => {
+            errorMsg.style.display = 'none';
+            
+            try {
+                // Trigger Google Popup
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+
+                // Check if user already exists in Firestore database
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                // If not, silently create their profile (hybrid login/register)
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
+                        id: user.uid,
+                        email: user.email,
+                        username: user.displayName || "Google User",
+                        phone: user.phoneNumber || "",
+                        gender: "",
+                        dob: "",
+                        role: "user",
+                        status: "active",
+                        lastUploadDate: null,
+                        createdAt: serverTimestamp()
+                    });
+                }
+
+                // Redirect to Home
+                window.location.replace("home.html");
+
+            } catch (error) {
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    showError("Google sign-in failed. Please try again.");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
