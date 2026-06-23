@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Welcome - Nexy Fans</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts for Premium Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfdfd;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Premium Soft Mesh Gradient Background */
+        .mesh-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            border-radius: 50%;
+            animation: drift 10s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background: #e2e8f0;
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: #f1f5f9;
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        /* Main Content Container */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 24px;
+        }
+
+        /* Slider Section */
+        .slider-container {
+            flex: 1;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .icon-wrapper {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .icon-wrapper svg {
+            width: 56px;
+            height: 56px;
+            fill: #1a1a1a;
+        }
+
+        .slide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .slide-desc {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* Pagination Dots */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            width: 24px;
+            background: #1a1a1a;
+        }
+
+        /* Actions Section (Glassmorphism Bottom) */
+        .actions-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 20px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.7);
+            color: #1a1a1a;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Soft Animated Background -->
+    <div class="mesh-bg">
+        <div class="mesh-blob blob-1"></div>
+        <div class="mesh-blob blob-2"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        
+        <!-- Slider -->
+        <div class="slider-container" id="sliderContainer">
+            <div class="slider-track" id="sliderTrack">
+                
+                <!-- Slide 1 -->
+                <div class="slide">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 5.14V18.86C8 19.75 8.97 20.29 9.72 19.82L20.59 13.06C21.28 12.63 21.28 11.64 20.59 11.21L9.72 4.45C8.97 3.98 8 4.52 8 5.14Z"/>
+                        </svg>
+                    </div>
+                    <h2 class="slide-title">Discover Videos</h2>
+                    <p class="slide-desc">Explore premium user-generated content<br>with a smooth, infinite scroll experience.</p>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"/>
+                        </svg>
+                    </div>
+                    <h2 class="slide-title">Join Communities</h2>
+                    <p class="slide-desc">Connect with creators and fans in<br>exclusive, safe group chats.</p>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <div class="icon-wrapper">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+                        </svg>
+                    </div>
+                    <h2 class="slide-title">Share Your Vibe</h2>
+                    <p class="slide-desc">Upload weekly to keep your streak alive<br>and grow your premium audience.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div>
+            <!-- Pagination Dots -->
+            <div class="pagination">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="actions-wrapper">
+                <button class="btn btn-primary" onclick="window.location.href='register.html'">Create Account</button>
+                <button class="btn btn-secondary" onclick="window.location.href='login.html'">Log In</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Slider & Swipe Logic -->
+    <script>
+        const track = document.getElementById('sliderTrack');
+        const dots = document.querySelectorAll('.dot');
+        const slides = document.querySelectorAll('.slide');
+        
+        let currentIndex = 0;
+        let startX = 0;
+        let isDragging = false;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        const autoPlayInterval = 4000; // 4 seconds per slide
+        let autoPlayTimer;
+
+        function updateSlider() {
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+            prevTranslate = currentIndex * -window.innerWidth;
+        }
+
+        function nextSlide() {
+            if (currentIndex < slides.length - 1) {
+                currentIndex++;
+            } else {
+                currentIndex = 0; // Loop back to start
+            }
+            updateSlider();
+        }
+
+        // Auto play functionality
+        function startAutoPlay() {
+            autoPlayTimer = setInterval(nextSlide, autoPlayInterval);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayTimer);
+            startAutoPlay();
+        }
+
+        // Touch / Swipe Logic for Mobile
+        const container = document.getElementById('sliderContainer');
+
+        container.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+            clearInterval(autoPlayTimer);
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const currentX = e.touches[0].clientX;
+            const diff = currentX - startX;
+            // Add a little friction if swiping past the edges
+            if (
+                (currentIndex === 0 && diff > 0) || 
+                (currentIndex === slides.length - 1 && diff < 0)
+            ) {
+                track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${diff * 0.2}px))`;
+            } else {
+                track.style.transform = `translateX(calc(-${currentIndex * 100}% + ${diff}px))`;
+            }
+        });
+
+        container.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            const endX = e.changedTouches[0].clientX;
+            const diff = endX - startX;
+
+            if (diff < -50 && currentIndex < slides.length - 1) {
+                currentIndex++; // Swipe left
+            } else if (diff > 50 && currentIndex > 0) {
+                currentIndex--; // Swipe right
+            }
+            
+            track.style.transition = 'transform 0.3s ease-out';
+            updateSlider();
+            resetAutoPlay();
+        });
+
+        // Initialize
+        startAutoPlay();
+    </script>
+</body>
+</html>
