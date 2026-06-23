@@ -1,0 +1,23 @@
+{
+  "name": "Nexy Fans - Premium Video Social",
+  "short_name": "Nexy Fans",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait",
+  "description": "Safe user-generated video sharing platform.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3670/3670163.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3670/3670163.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
