@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Profile - Nexy Fans</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        /* Top Header */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 900;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f1f5f9;
+            transition: transform 0.2s;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.9);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #1a1a1a;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            padding-top: 60px;
+            padding-bottom: 100px; /* Space for nav dock */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .top-header { padding-left: 100px; }
+            .main-layout { padding-left: 80px; }
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 600px;
+            background: #ffffff;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Profile Info Section */
+        .profile-info {
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .avatar-lg {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .username {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .user-role {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Stats Section */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Tabs UI */
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 16px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #94a3b8;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #1a1a1a;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: #1a1a1a;
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px; /* Instagram style tight grid */
+            background: #f1f5f9;
+        }
+
+        .grid-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            background: #e2e8f0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .grid-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+
+        .status-pending { background: rgba(245, 158, 11, 0.8); } /* Orange */
+        .status-approved { background: rgba(16, 185, 129, 0.8); } /* Green */
+        .status-rejected { background: rgba(239, 68, 68, 0.8); } /* Red */
+
+        /* Empty State */
+        .empty-state {
+            grid-column: span 3;
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            fill: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        /* Skeleton Loaders */
+        .skeleton-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+        
+        .skeleton-item {
+            aspect-ratio: 3/4;
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Dock Container -->
+    <div id="navDockContainer"></div>
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-title" id="headerUsername">
+            Profile
+        </div>
+        <div class="header-actions">
+            <!-- Settings Button -->
+            <button class="icon-btn" onclick="window.location.href='settings.html'">
+                <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 C9.65,21.83,9.86,22,10.1,22h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+            </button>
+            <!-- Logout Button -->
+            <button class="icon-btn" id="logoutBtn" style="background: #fef2f2;">
+                <svg viewBox="0 0 24 24" style="fill: #ef4444;"><path d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-layout">
+        <div class="profile-container">
+            
+            <!-- User Info -->
+            <div class="profile-info">
+                <div class="avatar-lg" id="profileAvatar">U</div>
+                <h1 class="username" id="profileName">Loading...</h1>
+                <div class="user-role" id="profileRole">User</div>
+                
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-value" id="uploadCount">0</span>
+                        <span class="stat-label">Uploads</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Likes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tabs -->
+            <div class="profile-tabs">
+                <div class="tab active">My Videos</div>
+            </div>
+
+            <!-- Video Grid Container -->
+            <div id="loadingSkeletons" class="skeleton-grid">
+                <div class="skeleton-item"></div>
+                <div class="skeleton-item"></div>
+                <div class="skeleton-item"></div>
+            </div>
+
+            <div class="video-grid" id="videoGrid">
+                <!-- Videos will be injected here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <svg viewBox="0 0 24 24"><path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6ZM20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM12 14.5V5.5L18 10L12 14.5Z"/></svg>
+                <h3>No videos uploaded</h3>
+                <p>Tap the + button to share your first video.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- App Logic -->
+    <script type="module">
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db } from "./imp/firebase-config.js";
+
+        let currentUser = null;
+
+        // 1. Check Auth & Load Data
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.replace("login.html");
+            } else {
+                await loadUserProfile(user.uid);
+                await loadUserVideos(user.uid);
+            }
+        });
+
+        // 2. Load Nav Dock
+        async function loadNavDock() {
+            try {
+                const response = await fetch('./imp/nav-dock-button.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    document.getElementById('navDockContainer').innerHTML = html;
+                    const scripts = document.getElementById('navDockContainer').getElementsByTagName('script');
+                    for (let script of scripts) eval(script.innerText);
+                }
+            } catch (error) { console.error("Nav load failed", error); }
+        }
+        loadNavDock();
+
+        // 3. Fetch User Profile Data
+        async function loadUserProfile(uid) {
+            try {
+                const userDoc = await getDoc(doc(db, "users", uid));
+                if (userDoc.exists()) {
+                    currentUser = userDoc.data();
+                    
+                    const name = currentUser.username || "User";
+                    document.getElementById('headerUsername').innerText = name;
+                    document.getElementById('profileName').innerText = name;
+                    document.getElementById('profileAvatar').innerText = name.charAt(0).toUpperCase();
+                    
+                    // Show Role (Capitalize first letter)
+                    const role = currentUser.role || "user";
+                    document.getElementById('profileRole').innerText = role.charAt(0).toUpperCase() + role.slice(1);
+                }
+            } catch (error) {
+                console.error("Error fetching user:", error);
+            }
+        }
+
+        // 4. Fetch User's Videos
+        async function loadUserVideos(uid) {
+            const videoGrid = document.getElementById('videoGrid');
+            const skeleton = document.getElementById('loadingSkeletons');
+            const emptyState = document.getElementById('emptyState');
+            const uploadCount = document.getElementById('uploadCount');
+
+            try {
+                const videosRef = collection(db, "videos");
+                // Get all videos by this user
+                const q = query(videosRef, where("userId", "==", uid), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                skeleton.style.display = 'none';
+                uploadCount.innerText = querySnapshot.size;
+
+                if (querySnapshot.empty) {
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const gridItem = createGridItem(data);
+                    videoGrid.appendChild(gridItem);
+                });
+
+            } catch (error) {
+                console.error("Error fetching videos:", error);
+                skeleton.style.display = 'none';
+                emptyState.innerHTML = "<p>Error loading videos.</p>";
+                emptyState.style.display = 'block';
+            }
+        }
+
+        // 5. Create Grid Item UI
+        function createGridItem(data) {
+            const item = document.createElement('div');
+            item.className = 'grid-item';
+
+            // Determine Status Badge Color
+            let badgeClass = 'status-pending';
+            let badgeText = '⏳ Pending';
+            if (data.status === 'approved') { badgeClass = 'status-approved'; badgeText = '✅ Approved'; }
+            if (data.status === 'rejected') { badgeClass = 'status-rejected'; badgeText = '❌ Rejected'; }
+
+            item.innerHTML = `
+                <div class="status-badge ${badgeClass}">${badgeText}</div>
+                <!-- Muted, autoplayless video acts as thumbnail -->
+                <video src="${data.videoURL}#t=0.1" preload="metadata" muted playsinline></video>
+            `;
+            
+            // Optional: clicking could open a fullscreen view or modal later
+            return item;
+        }
+
+        // 6. Logout Handler
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            if(confirm("Are you sure you want to log out?")) {
+                try {
+                    await signOut(auth);
+                    // onAuthStateChanged will trigger and redirect to login, 
+                    // but we can manually force it to splash
+                    window.location.replace("index.html");
+                } catch (error) {
+                    console.error("Error logging out:", error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
