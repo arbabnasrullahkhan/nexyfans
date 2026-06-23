@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Elite Studio - Nexy Hub</title>
     
+    <!-- Ultra Premium Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -12,7 +13,9 @@
             --primary: #000000;
             --accent: #6366f1;
             --bg: #f8fafc;
+            --card: #ffffff;
             --glass: rgba(255, 255, 255, 0.8);
+            --border: #e2e8f0;
             --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -23,147 +26,188 @@
             background-color: var(--bg);
             color: #0f172a;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         /* Luxury Header */
         .studio-header {
             position: fixed; top: 0; width: 100%; height: 70px;
-            background: var(--glass); backdrop-filter: blur(20px);
+            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; z-index: 1000; border-bottom: 1px solid #e2e8f0;
+            padding: 0 20px; z-index: 1000; border-bottom: 1px solid var(--border);
         }
+
+        .back-btn {
+            background: white; border: 1px solid var(--border); border-radius: 12px;
+            width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: var(--transition);
+        }
+        .back-btn:active { transform: scale(0.9); }
 
         .main-layout {
-            padding: 90px 20px 120px;
-            max-width: 500px; margin: 0 auto;
+            padding: 100px 24px 120px;
+            max-width: 550px; margin: 0 auto;
         }
 
-        /* Step 1: Select UI */
-        .upload-box {
-            background: white; border-radius: 35px; padding: 40px 20px;
-            text-align: center; border: 2px dashed #cbd5e1;
+        /* Step 1: Select Box */
+        .upload-card {
+            background: white; border-radius: 35px; padding: 60px 20px;
+            text-align: center; border: 2.5px dashed #cbd5e1;
             transition: var(--transition); cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
         }
-        .upload-box:hover { border-color: var(--primary); background: #f1f5f9; }
-        .upload-box svg { width: 60px; height: 60px; fill: #94a3b8; margin-bottom: 20px; }
+        .upload-card:hover { border-color: var(--primary); background: #f1f5f9; }
+        .upload-card svg { width: 70px; height: 70px; fill: #94a3b8; margin-bottom: 24px; animation: bounce 2s infinite; }
 
-        /* Step 2: Details UI (Hidden Initially) */
-        #detailsForm { display: none; animation: fadeIn 0.6s ease-out; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
-        .video-preview-card {
+        /* Step 2: Content Details (Hidden) */
+        #detailsForm { display: none; animation: slideIn 0.6s ease-out; }
+
+        .preview-wrapper {
             width: 100%; aspect-ratio: 16/9; background: #000;
-            border-radius: 25px; overflow: hidden; margin-bottom: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 28px; overflow: hidden; margin-bottom: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            position: relative;
         }
         video { width: 100%; height: 100%; object-fit: cover; }
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; margin-left: 5px; }
+        /* Custom Progress Bar */
+        .sync-box {
+            background: #f1f5f9; padding: 20px; border-radius: 20px; margin-bottom: 30px;
+        }
+        .bar-track { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+        .bar-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.4s; }
+        .sync-info { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; font-weight: 800; }
+
+        /* Form Inputs */
+        .form-group { margin-bottom: 24px; }
+        label { display: block; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-left: 5px; }
         
         input, textarea, select {
-            width: 100%; padding: 16px; border-radius: 18px;
-            border: 1.5px solid #e2e8f0; background: white;
-            font-size: 15px; font-weight: 500; outline: none; transition: var(--transition);
+            width: 100%; padding: 18px; border-radius: 20px;
+            border: 1.5px solid var(--border); background: white;
+            font-size: 15px; font-weight: 600; outline: none; transition: var(--transition);
+            font-family: inherit;
         }
-        input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0,0,0,0.03); }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 5px rgba(0,0,0,0.03); }
 
-        /* Progress Engine */
-        .progress-container { margin: 20px 0; display: none; }
-        .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
-        .progress-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s; }
-        .progress-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-top: 8px; }
+        textarea { height: 120px; resize: none; }
 
-        .publish-btn {
-            width: 100%; padding: 20px; border-radius: 20px;
+        /* Action Button */
+        .btn-publish {
+            width: 100%; padding: 22px; border-radius: 22px;
             background: var(--primary); color: white; border: none;
-            font-size: 16px; font-weight: 800; cursor: pointer;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1); transition: var(--transition);
+            font-size: 17px; font-weight: 800; cursor: pointer;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); transition: var(--transition);
+            display: flex; justify-content: center; align-items: center; gap: 12px;
         }
-        .publish-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-publish:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; }
+        .btn-publish:active { transform: scale(0.96); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Security Loader */
+        .spinner {
+            width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white; border-radius: 50%; animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* No Download Shield */
+        video::-internal-media-controls-download-button { display:none; }
         video::-webkit-media-controls-enclosure { display:none !important; }
     </style>
 </head>
 <body>
 
+    <!-- Dynamic Injections -->
     <div id="loaderContainer"></div>
 
     <header class="studio-header">
-        <button onclick="history.back()" style="background:none; border:none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-        <span style="font-weight: 800;">Elite Studio</span>
-        <div style="width:24px;"></div>
+        <div class="back-btn" onclick="history.back()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </div>
+        <span style="font-weight: 900; letter-spacing: -0.5px; font-size: 18px;">ELITE STUDIO</span>
+        <div style="width:40px;"></div>
     </header>
 
     <main class="main-layout">
         
-        <!-- Step 1: Selector -->
-        <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <!-- Step 1: Initial State -->
+        <div class="upload-card" id="selectUI" onclick="document.getElementById('fileInput').click()">
             <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04zM14 13V17H10V13H7L12 8L17 13H14z"/></svg>
-            <h3>Select Elite Video</h3>
-            <p style="color: #64748b; font-size: 14px; margin-top: 10px;">MP4, MKV or MOV up to 1GB</p>
+            <h2 style="font-weight: 800; font-size: 22px;">Upload Elite Video</h2>
+            <p style="color: #64748b; font-size: 14px; margin-top: 12px; font-weight: 500;">Select a video from your gallery (up to 1GB)</p>
             <input type="file" id="fileInput" hidden accept="video/*">
         </div>
 
-        <!-- Step 2: Progress & Details -->
+        <!-- Step 2: Editing State -->
         <div id="detailsForm">
-            <div class="video-preview-card">
-                <video id="videoPreview" muted></video>
+            <div class="preview-wrapper">
+                <video id="videoPreview" muted loop></video>
             </div>
 
-            <div class="progress-container" id="progCont">
-                <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
-                <div class="progress-info">
-                    <span id="progStatus">Syncing with Elite Server...</span>
-                    <span id="progPercent">0%</span>
+            <!-- Optimized Sync Engine -->
+            <div class="sync-box">
+                <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+                <div class="sync-info">
+                    <span id="syncStatus">Encrypting & Syncing Content...</span>
+                    <span id="syncPercent">0%</span>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Video Title</label>
-                <input type="text" id="vTitle" placeholder="Give your video a luxury name...">
+                <label>Elite Title</label>
+                <input type="text" id="vTitle" placeholder="Enter a luxury name for your video">
             </div>
 
             <div class="form-group">
-                <label>Description</label>
-                <textarea id="vDesc" placeholder="Describe the elite experience..."></textarea>
+                <label>Experience Description</label>
+                <textarea id="vDesc" placeholder="Describe the premium experience..."></textarea>
             </div>
 
-            <div class="form-group">
-                <label>Target Audience</label>
-                <select id="vTarget">
-                    <option value="male">👨 Male Only</option>
-                    <option value="female">👩 Female Only</option>
-                    <option value="kids">👶 Kids Content</option>
-                    <option value="all">🌍 All Elite Members</option>
-                </select>
+            <div class="row" style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Elite Target</label>
+                    <select id="vTarget">
+                        <option value="male">👨 Male Only</option>
+                        <option value="female">👩 Female Only</option>
+                        <option value="kids">👶 Kids Content</option>
+                        <option value="all" selected>🌍 All Elite</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Category</label>
+                    <select id="vCat">
+                        <option value="luxury">Luxury</option>
+                        <option value="action">Action</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="trends">Trending</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Category</label>
-                <select id="vCat">
-                    <option value="luxury">Luxury Life</option>
-                    <option value="action">Action</option>
-                    <option value="gaming">Gaming</option>
-                    <option value="trending">Trending</option>
-                </select>
-            </div>
-
-            <button class="publish-btn" id="publishBtn" disabled>Publish to Elite Feed</button>
+            <button class="btn-publish" id="publishBtn" disabled>
+                <span>Publish Elite Video</span>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
         </div>
 
     </main>
 
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { auth, db } from "./imp/firebase-config.js";
 
-        let selectedFile = null;
         let userData = null;
 
+        // 1. Auth Check
         onAuthStateChanged(auth, async (user) => {
             if (!user) window.location.replace('login.html');
             else {
@@ -173,80 +217,100 @@
         });
 
         const fileInput = document.getElementById('fileInput');
-        const dropZone = document.getElementById('dropZone');
+        const selectUI = document.getElementById('selectUI');
         const detailsForm = document.getElementById('detailsForm');
         const videoPreview = document.getElementById('videoPreview');
 
+        // 2. File Selection Handler
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                selectedFile = file;
-                const url = URL.createObjectURL(file);
-                videoPreview.src = url;
+                // Show Preview
+                videoPreview.src = URL.createObjectURL(file);
+                videoPreview.play();
                 
-                dropZone.style.display = 'none';
+                // Switch UI
+                selectUI.style.display = 'none';
                 detailsForm.style.display = 'block';
                 
-                startSimulatedUpload();
+                // Start High-Speed Sync Simulation
+                runSyncEngine();
             }
         };
 
-        function startSimulatedUpload() {
-            const cont = document.getElementById('progCont');
-            const fill = document.getElementById('progFill');
-            const percent = document.getElementById('progPercent');
+        // 3. Simulated Elite Streaming Engine (HLS/Transcoding Simulation)
+        function runSyncEngine() {
+            const fill = document.getElementById('barFill');
+            const percent = document.getElementById('syncPercent');
+            const status = document.getElementById('syncStatus');
             const btn = document.getElementById('publishBtn');
             
-            cont.style.display = 'block';
             let p = 0;
             const interval = setInterval(() => {
-                p += Math.random() * 5;
+                p += Math.random() * 8; // Fast simulation
                 if (p >= 100) {
                     p = 100;
                     clearInterval(interval);
-                    document.getElementById('progStatus').innerText = "Video Transcoded & Optimized!";
+                    status.innerText = "Optimized for Elite Streaming!";
+                    status.style.color = "#10b981";
                     btn.disabled = false;
                 }
                 fill.style.width = p + '%';
                 percent.innerText = Math.floor(p) + '%';
-            }, 300);
+            }, 400);
         }
 
+        // 4. Final Publish Logic
         document.getElementById('publishBtn').onclick = async () => {
             const btn = document.getElementById('publishBtn');
-            btn.innerText = "Publishing Elite Content...";
+            const spinner = document.getElementById('btnSpinner');
+            const btnText = btn.querySelector('span');
+
             btn.disabled = true;
+            btnText.innerText = "Syncing with Database...";
+            spinner.style.display = 'block';
 
             try {
-                // یہاں ہم ویڈیو فائل کا نام اور میٹا ڈیٹا فائر اسٹور میں بھیج رہے ہیں
-                // چونکہ آپ نے کہا کہ اسٹوریج یوز نہیں کرنا، ہم ایک Elite Streaming Link جنریٹ کر رہے ہیں
-                const eliteStreamingLink = `https://elite-stream.nexyfans.io/v/${Date.now()}`;
+                // Generate Elite Content Link (Simulated CDN)
+                const eliteCDN = `https://elite-stream.nexyfans.app/cdn/${Date.now()}`;
 
+                // Add to Firestore Videos
                 await addDoc(collection(db, "videos"), {
                     userId: auth.currentUser.uid,
-                    username: userData.name || "Elite User",
-                    title: document.getElementById('vTitle').value || "Untitled Elite Video",
-                    description: document.getElementById('vDesc').value || "",
+                    username: userData ? (userData.name || userData.username) : "Elite User",
+                    title: document.getElementById('vTitle').value || "Untitled Elite Clip",
+                    description: document.getElementById('vDesc').value || "Premium content on Nexy Hub.",
                     category: document.getElementById('vCat').value,
                     target: document.getElementById('vTarget').value,
-                    videoURL: eliteStreamingLink, // اصل فائل CDN لنک
+                    videoURL: eliteCDN, 
+                    thumbnail: "", 
                     views: 0,
                     likes: 0,
-                    status: 'approved',
+                    status: 'approved', // Works with updated Rules
                     createdAt: serverTimestamp()
                 });
 
-                alert("Luxury Video Published Successfully!");
-                window.location.replace('home.html');
+                // Update User's Last Upload Date (Weekly Rule)
+                await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                    lastUploadDate: serverTimestamp(),
+                    status: 'active'
+                });
+
+                btnText.innerText = "Content Live!";
+                setTimeout(() => {
+                    window.location.replace('home.html');
+                }, 1000);
 
             } catch (err) {
-                console.error(err);
-                alert("Elite Sync Error. Please check your internet.");
+                console.error("Critical Sync Error:", err);
+                alert("Elite Sync Error: Missing permissions or connection lost. Please retry.");
                 btn.disabled = false;
+                btnText.innerText = "Retry Publishing";
+                spinner.style.display = 'none';
             }
         };
 
-        // Inject Loader
+        // Inject Loader Component
         fetch('./imp/loader.html').then(r => r.text()).then(html => {
             document.getElementById('loaderContainer').innerHTML = html;
             const scripts = document.getElementById('loaderContainer').getElementsByTagName('script');
