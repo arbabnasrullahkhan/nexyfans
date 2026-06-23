@@ -4,105 +4,276 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Elite Studio - Nexy Hub</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        :root { --primary: #000; --accent: #6366f1; --bg: #f8fafc; --glass: rgba(255, 255, 255, 0.8); --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: #0f172a; padding: 90px 20px; }
-        .studio-header { position: fixed; top: 0; left: 0; width: 100%; height: 70px; background: var(--glass); backdrop-filter: blur(20px); display: flex; align-items: center; padding: 0 20px; z-index: 1000; border-bottom: 1px solid #e2e8f0; justify-content: space-between; }
-        .upload-card { background: white; border-radius: 30px; padding: 50px 20px; text-align: center; border: 2px dashed #cbd5e1; cursor: pointer; transition: var(--transition); }
+        :root {
+            --primary: #000000;
+            --accent: #6366f1;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --glass: rgba(255, 255, 255, 0.85);
+            --border: #e2e8f0;
+            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: #0f172a;
+            padding-top: 80px;
+            padding-bottom: 50px;
+        }
+
+        /* --- LUXURY HEADER --- */
+        .studio-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 1000; border-bottom: 1px solid var(--border);
+        }
+
+        .back-btn {
+            background: white; border: 1px solid var(--border); border-radius: 12px;
+            width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: var(--transition);
+        }
+        .back-btn:active { transform: scale(0.9); }
+
+        .main-layout { max-width: 550px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- STEP 1: SELECTOR --- */
+        .upload-card {
+            background: white; border-radius: 35px; padding: 60px 20px;
+            text-align: center; border: 2.5px dashed #cbd5e1;
+            transition: var(--transition); cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
         .upload-card:hover { border-color: var(--primary); background: #f1f5f9; }
+        .upload-card svg { width: 60px; height: 60px; fill: #94a3b8; margin-bottom: 20px; }
+
+        /* --- STEP 2: DETAILS --- */
         #detailsForm { display: none; animation: slideUp 0.6s ease; }
-        .preview-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
+
+        .preview-box {
+            width: 100%; aspect-ratio: 16/9; background: #000;
+            border-radius: 25px; overflow: hidden; margin-bottom: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); position: relative;
+        }
         video { width: 100%; height: 100%; object-fit: cover; }
-        input, textarea, select { width: 100%; padding: 15px; border-radius: 15px; border: 1.5px solid #e2e8f0; margin-bottom: 15px; outline: none; font-family: inherit; }
-        .btn-publish { width: 100%; padding: 18px; border-radius: 18px; background: var(--primary); color: white; border: none; font-weight: 800; cursor: pointer; }
+
+        /* Sync Progress Bar */
+        .sync-box { background: #f1f5f9; padding: 15px; border-radius: 18px; margin-bottom: 25px; }
+        .bar-track { width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+        .bar-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s; }
+        .sync-text { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+
+        /* Inputs */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; margin-left: 5px; }
+        
+        input, textarea, select {
+            width: 100%; padding: 16px; border-radius: 18px;
+            border: 1.5px solid #e2e8f0; background: white;
+            font-size: 15px; font-weight: 600; outline: none; transition: var(--transition);
+        }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0,0,0,0.03); }
+
+        .btn-publish {
+            width: 100%; padding: 20px; border-radius: 20px;
+            background: var(--primary); color: white; border: none;
+            font-size: 16px; font-weight: 800; cursor: pointer;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); transition: var(--transition);
+        }
+        .btn-publish:disabled { background: #cbd5e1; cursor: not-allowed; }
+
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
     </style>
 </head>
 <body>
+
     <header class="studio-header">
-        <button onclick="history.back()" style="background:none; border:none; font-weight:800;">Back</button>
-        <span style="font-weight: 900;">ELITE STUDIO</span>
-        <div></div>
+        <div class="back-btn" onclick="history.back()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </div>
+        <span style="font-weight: 900; letter-spacing: -0.5px;">ELITE STUDIO</span>
+        <div style="width:40px;"></div>
     </header>
 
-    <div class="upload-card" id="selectUI" onclick="document.getElementById('fileInput').click()">
-        <h2>Select Elite Video</h2>
-        <p>Choose a video from your device</p>
-        <input type="file" id="fileInput" hidden accept="video/*">
-    </div>
+    <main class="main-layout">
+        
+        <!-- UI: Step 1 (Select) -->
+        <div class="upload-card" id="selectUI" onclick="document.getElementById('fileInput').click()">
+            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04zM14 13V17H10V13H7L12 8L17 13H14z"/></svg>
+            <h2 style="font-weight: 800;">Upload Elite Video</h2>
+            <p style="color: #64748b; font-size: 14px; margin-top: 10px;">Select from gallery (up to 1GB)</p>
+            <input type="file" id="fileInput" hidden accept="video/*">
+        </div>
 
-    <div id="detailsForm">
-        <div class="preview-box"><video id="videoPreview" muted loop></video></div>
-        <input type="text" id="vTitle" placeholder="Video Title">
-        <textarea id="vDesc" placeholder="Description"></textarea>
-        <select id="vCat">
-            <option value="luxury">Luxury</option>
-            <option value="action">Action</option>
-        </select>
-        <select id="vTarget">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="kids">Kids</option>
-        </select>
-        <button class="btn-publish" id="publishBtn">Publish Now</button>
-    </div>
+        <!-- UI: Step 2 (Details) -->
+        <div id="detailsForm">
+            <div class="preview-box">
+                <video id="videoPreview" muted loop></video>
+                <!-- Hidden Canvas for Auto-Thumbnail -->
+                <canvas id="thumbCanvas" style="display:none;"></canvas>
+            </div>
+
+            <div class="sync-box">
+                <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+                <div class="sync-text">
+                    <span id="syncStatus">Generating Elite Meta...</span>
+                    <span id="syncPercent">0%</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Video Title</label>
+                <input type="text" id="vTitle" placeholder="Luxury title for your elite content">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="vDesc" rows="3" placeholder="Describe the experience..."></textarea>
+            </div>
+
+            <div style="display:flex; gap:15px;">
+                <div class="form-group" style="flex:1;">
+                    <label>Category</label>
+                    <select id="vCat">
+                        <option value="luxury">Luxury</option>
+                        <option value="action">Action</option>
+                        <option value="trends">Trending</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex:1;">
+                    <label>Audience</label>
+                    <select id="vTarget">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="kids">Kids</option>
+                        <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-publish" id="publishBtn" disabled>Publish Elite Content</button>
+        </div>
+
+    </main>
 
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, addDoc, serverTimestamp, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { auth, db } from "./imp/firebase-config.js";
 
-        const fileInput = document.getElementById('fileInput');
-        const selectUI = document.getElementById('selectUI');
-        const detailsForm = document.getElementById('detailsForm');
-        const videoPreview = document.getElementById('videoPreview');
+        let selectedFile = null;
+        let generatedThumbnail = null;
 
+        const fileInput = document.getElementById('fileInput');
+        const videoPreview = document.getElementById('videoPreview');
+        const thumbCanvas = document.getElementById('thumbCanvas');
+
+        // 1. File Selection & Auto-Thumbnail Logic
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                videoPreview.src = URL.createObjectURL(file);
-                videoPreview.play();
-                selectUI.style.display = 'none';
-                detailsForm.style.display = 'block';
+                selectedFile = file;
+                const url = URL.createObjectURL(file);
+                videoPreview.src = url;
+
+                document.getElementById('selectUI').style.display = 'none';
+                document.getElementById('detailsForm').style.display = 'block';
+
+                // ویڈیو لوڈ ہونے کا انتظار کریں تاکہ تصویر لی جا سکے
+                videoPreview.onloadeddata = () => {
+                    videoPreview.currentTime = 1; // 1 second پر تصویر کھینچیں
+                };
+
+                videoPreview.onseeked = () => {
+                    // تصویر کھینچنے کا فنکشن
+                    const ctx = thumbCanvas.getContext('2d');
+                    thumbCanvas.width = 640;
+                    thumbCanvas.height = 360;
+                    ctx.drawImage(videoPreview, 0, 0, thumbCanvas.width, thumbCanvas.height);
+                    generatedThumbnail = thumbCanvas.toDataURL('image/jpeg', 0.7); // Base64 Thumbnail
+                    videoPreview.play();
+                    startSyncSimulation();
+                };
             }
         };
 
+        // 2. High-Speed Sync Simulation
+        function startSyncSimulation() {
+            const fill = document.getElementById('barFill');
+            const percent = document.getElementById('syncPercent');
+            const status = document.getElementById('syncStatus');
+            const btn = document.getElementById('publishBtn');
+
+            let p = 0;
+            const interval = setInterval(() => {
+                p += Math.random() * 10;
+                if (p >= 100) {
+                    p = 100;
+                    clearInterval(interval);
+                    status.innerText = "Elite Sync Ready!";
+                    btn.disabled = false;
+                }
+                fill.style.width = p + '%';
+                percent.innerText = Math.floor(p) + '%';
+            }, 300);
+        }
+
+        // 3. Final Publishing
         document.getElementById('publishBtn').onclick = async () => {
             const btn = document.getElementById('publishBtn');
-            btn.innerText = "Syncing...";
+            btn.innerText = "Publishing...";
             btn.disabled = true;
 
             try {
-                // چونکہ اسٹوریج استعمال نہیں ہو رہا، اس لیے ہم ورکنگ لنکس دے رہے ہیں (ٹیسٹنگ کے لیے)
-                // پروڈکشن میں یہاں آپ کا اپنا ویڈیو ہوسٹنگ لنک آئے گا
-                const workingLinks = [
-                    "https://cdn.pixabay.com/vimeo/327310186/mountain-23210.mp4?width=1280&hash=8f7e2730f9a7c64c8d5d19d690a4242d966e3b5e",
-                    "https://cdn.pixabay.com/vimeo/147035339/city-1237.mp4?width=1280&hash=57121666992d9d9f584e03f568f5c9e2b8b9b8b8"
+                // Stable Testing Video Links (As per earlier steps)
+                const stableLinks = [
+                    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
                 ];
-                const randomVideo = workingLinks[Math.floor(Math.random() * workingLinks.length)];
+                const finalVideoURL = stableLinks[Math.floor(Math.random() * stableLinks.length)];
 
+                // Firestore میں ڈیٹا سیو کرنا
                 await addDoc(collection(db, "videos"), {
                     userId: auth.currentUser.uid,
                     username: auth.currentUser.displayName || "Elite Member",
-                    title: document.getElementById('vTitle').value || "Elite Experience",
+                    title: document.getElementById('vTitle').value || "Untitled Elite Clip",
                     description: document.getElementById('vDesc').value || "",
                     category: document.getElementById('vCat').value,
                     target: document.getElementById('vTarget').value,
-                    videoURL: randomVideo, // اب یہ حقیقی ویڈیو لنک ہے
+                    videoURL: finalVideoURL,
+                    thumbnail: generatedThumbnail, // خودکار تصویر محفوظ ہو گئی
                     views: 0,
                     likes: 0,
                     status: 'approved',
                     createdAt: serverTimestamp()
                 });
 
+                // Weekly Streak Update
+                await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                    lastUploadDate: serverTimestamp(),
+                    status: 'active'
+                });
+
+                alert("Elite Content Live!");
                 window.location.replace('home.html');
+
             } catch (err) {
-                alert("Error: " + err.message);
+                alert("Elite Sync Error: " + err.message);
                 btn.disabled = false;
+                btn.innerText = "Retry Publishing";
             }
         };
+
     </script>
 </body>
 </html>
