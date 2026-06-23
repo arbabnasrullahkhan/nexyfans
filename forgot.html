@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Forgot Password - Nexy Fans</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts for Premium Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfdfd;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-top: 12px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .back-btn:active {
+            background: #f1f5f9;
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #1a1a1a;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 4px rgba(26, 26, 26, 0.05);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: #1a1a1a;
+            color: #ffffff;
+            margin-top: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Messages */
+        .msg-box {
+            font-size: 14px;
+            margin-bottom: 24px;
+            text-align: center;
+            display: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .success-msg {
+            color: #059669;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+        }
+
+        /* Loader inside button */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hide form when success */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Back Button -->
+        <div class="top-nav">
+            <button class="back-btn" onclick="window.location.href='login.html'">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">Reset Password</h1>
+            <p class="subtitle">Enter your email address and we'll send you a link to reset your password.</p>
+        </div>
+
+        <!-- Alert Messages -->
+        <div id="errorMsg" class="msg-box error-msg"></div>
+        <div id="successMsg" class="msg-box success-msg">
+            Success! We've sent a password reset link to your email. Please check your inbox (and spam folder).
+        </div>
+
+        <!-- Reset Form -->
+        <form id="forgotForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+                <span id="btnText">Send Reset Link</span>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
+        </form>
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { auth } from "./imp/firebase-config.js";
+
+        // UI Elements
+        const forgotForm = document.getElementById('forgotForm');
+        const emailInput = document.getElementById('email');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const errorMsg = document.getElementById('errorMsg');
+        const successMsg = document.getElementById('successMsg');
+
+        // Reset Messages
+        function clearMessages() {
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+        }
+
+        // Loading State Helper
+        function setLoading(isLoading) {
+            if(isLoading) {
+                btnText.style.display = 'none';
+                btnSpinner.style.display = 'block';
+                submitBtn.disabled = true;
+            } else {
+                btnText.style.display = 'block';
+                btnSpinner.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Handle Forgot Password Submit
+        forgotForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearMessages();
+            setLoading(true);
+
+            const email = emailInput.value.trim();
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                
+                // Show Success & Hide Form
+                setLoading(false);
+                forgotForm.classList.add('hidden');
+                successMsg.style.display = 'block';
+                
+            } catch (error) {
+                setLoading(false);
+                let niceError = "An error occurred. Please try again.";
+                if (error.code === 'auth/user-not-found') niceError = "No account found with this email.";
+                if (error.code === 'auth/invalid-email') niceError = "Please enter a valid email address.";
+                
+                errorMsg.textContent = niceError;
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
