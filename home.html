@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Home - Nexy Fans</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        /* Top Header (Sticky Glassmorphism) */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 900;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-text svg {
+            width: 24px;
+            height: 24px;
+            fill: #1a1a1a;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f1f5f9;
+            transition: transform 0.2s;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.9);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #1a1a1a;
+        }
+
+        /* Main Feed Layout */
+        .main-layout {
+            padding-top: 70px; /* Space for top header */
+            padding-bottom: 90px; /* Space for mobile bottom nav */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .top-header {
+                padding-left: 100px; /* Offset for desktop sidebar */
+            }
+            .main-layout {
+                padding-left: 80px; /* Offset for desktop sidebar */
+                padding-bottom: 40px;
+            }
+        }
+
+        .feed-container {
+            width: 100%;
+            max-width: 480px; /* Mobile app feel on desktop */
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 0 16px;
+        }
+
+        /* Video Card */
+        .video-card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Header (User Info) */
+        .card-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .user-details h3 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .more-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .more-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #64748b;
+        }
+
+        /* Video Player Wrapper */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            background: #000000;
+            aspect-ratio: 4/5; /* Instagram style */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .video-wrapper.paused .play-overlay {
+            opacity: 1;
+        }
+
+        .play-overlay svg {
+            width: 30px;
+            height: 30px;
+            fill: #ffffff;
+            margin-left: 4px;
+        }
+
+        /* Card Actions */
+        .card-actions {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:active {
+            transform: scale(0.9);
+        }
+
+        .action-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: #1a1a1a;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: fill 0.2s, stroke 0.2s;
+        }
+
+        .action-btn.liked svg {
+            fill: #ef4444;
+            stroke: #ef4444;
+        }
+
+        /* Video Title */
+        .video-title {
+            padding: 0 16px 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #1a1a1a;
+        }
+
+        /* Skeleton Loader */
+        .skeleton-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 16px;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+        
+        .skeleton-anim {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            display: none;
+        }
+
+        .empty-state svg {
+            width: 60px;
+            height: 60px;
+            fill: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Placeholder for Navigation Dock -->
+    <div id="navDockContainer"></div>
+
+    <!-- Sticky Top Header -->
+    <header class="top-header">
+        <div class="logo-text">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5.14V18.86C8 19.75 8.97 20.29 9.72 19.82L20.59 13.06C21.28 12.63 21.28 11.64 20.59 11.21L9.72 4.45C8.97 3.98 8 4.52 8 5.14Z"/>
+            </svg>
+            Nexy
+        </div>
+        <div class="header-actions">
+            <!-- Notifications Icon -->
+            <button class="icon-btn" onclick="window.location.href='notifications.html'">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Feed Layout -->
+    <main class="main-layout">
+        <div class="feed-container" id="feedContainer">
+            
+            <!-- Skeleton Loaders (Shown initially) -->
+            <div id="loadingSkeletons">
+                <div class="skeleton-card">
+                    <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                        <div class="skeleton-anim" style="width: 40px; height: 40px; border-radius: 50%;"></div>
+                        <div style="display: flex; flex-direction: column; gap: 8px; justify-content: center;">
+                            <div class="skeleton-anim" style="width: 120px; height: 12px;"></div>
+                            <div class="skeleton-anim" style="width: 80px; height: 10px;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-anim" style="width: 100%; aspect-ratio: 4/5; border-radius: 12px; margin-bottom: 16px;"></div>
+                    <div class="skeleton-anim" style="width: 60%; height: 12px;"></div>
+                </div>
+            </div>
+
+            <!-- Empty State (Hidden initially) -->
+            <div class="empty-state" id="emptyState">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6ZM20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM12 14.5V5.5L18 10L12 14.5Z"/>
+                </svg>
+                <h3>No videos yet</h3>
+                <p>Be the first to upload and share your vibe with the community.</p>
+            </div>
+
+            <!-- Dynamic Videos will be injected here -->
+        </div>
+    </main>
+
+    <!-- App Logic -->
+    <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db } from "./imp/firebase-config.js";
+
+        // 1. Check Authentication
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.replace("login.html");
+            } else {
+                fetchVideos(); // Fetch videos once authenticated
+            }
+        });
+
+        // 2. Inject Navigation Dock
+        async function loadNavDock() {
+            try {
+                const response = await fetch('./imp/nav-dock-button.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    document.getElementById('navDockContainer').innerHTML = html;
+                    
+                    // Manually execute any script tags found in the injected HTML (since innerHTML doesn't run scripts)
+                    const scripts = document.getElementById('navDockContainer').getElementsByTagName('script');
+                    for (let script of scripts) {
+                        eval(script.innerText);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load nav dock:", error);
+            }
+        }
+        loadNavDock();
+
+        // 3. Fetch Videos from Firestore
+        async function fetchVideos() {
+            const feedContainer = document.getElementById('feedContainer');
+            const loader = document.getElementById('loadingSkeletons');
+            const emptyState = document.getElementById('emptyState');
+
+            try {
+                // Fetch videos (In production, add 'where("status", "==", "approved")')
+                const videosRef = collection(db, "videos");
+                const q = query(videosRef, orderBy("createdAt", "desc"), limit(10));
+                const querySnapshot = await getDocs(q);
+
+                loader.style.display = 'none';
+
+                if (querySnapshot.empty) {
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const videoData = doc.data();
+                    const videoCard = createVideoCard(videoData, doc.id);
+                    feedContainer.appendChild(videoCard);
+                });
+
+                setupVideoAutoplay();
+
+            } catch (error) {
+                console.error("Error fetching videos:", error);
+                loader.style.display = 'none';
+                emptyState.innerHTML = "<p>Error loading feed. Please refresh.</p>";
+                emptyState.style.display = 'block';
+            }
+        }
+
+        // 4. Create UI for Video Card
+        function createVideoCard(data, id) {
+            const card = document.createElement('article');
+            card.className = 'video-card';
+            
+            // Format Timestamp
+            let timeString = "Just now";
+            if (data.createdAt) {
+                const date = data.createdAt.toDate();
+                timeString = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="user-info">
+                        <div class="avatar">${data.username ? data.username.charAt(0).toUpperCase() : 'U'}</div>
+                        <div class="user-details">
+                            <h3>${data.username || 'User'}</h3>
+                            <p>${timeString}</p>
+                        </div>
+                    </div>
+                    <button class="more-btn">
+                        <svg viewBox="0 0 24 24"><path d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"/></svg>
+                    </button>
+                </div>
+                
+                <div class="video-wrapper paused" onclick="togglePlay(this)">
+                    <!-- Using placeholder video if URL is missing -->
+                    <video class="video-player" loop playsinline src="${data.videoURL || ''}" poster="${data.thumbnail || ''}"></video>
+                    <div class="play-overlay">
+                        <svg viewBox="0 0 24 24"><path d="M8 5.14V18.86C8 19.75 8.97 20.29 9.72 19.82L20.59 13.06C21.28 12.63 21.28 11.64 20.59 11.21L9.72 4.45C8.97 3.98 8 4.52 8 5.14Z"/></svg>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <div class="action-group">
+                        <button class="action-btn like-btn" onclick="toggleLike(this)">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.46 20.04L12 21.35Z"/></svg>
+                            <span>${data.likes || 0}</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg viewBox="0 0 24 24"><path d="M21 11.5C21 16.75 16.75 21 11.5 21C9.83 21 8.26 20.56 6.9 19.81L3 21L4.19 17.1C3.44 15.74 3 14.17 3 11.5C3 6.25 7.25 2 12.5 2C17.75 2 21 6.25 21 11.5Z"/></svg>
+                            <span>Comment</span>
+                        </button>
+                    </div>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24"><path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.34C15.11 18.55 15.08 18.77 15.08 19C15.08 20.66 16.42 22 18.08 22C19.74 22 21.08 20.66 21.08 19C21.08 17.34 19.74 16.08 18 16.08Z"/></svg>
+                    </button>
+                </div>
+                
+                <div class="video-title">
+                    <b>${data.username || 'User'}</b> ${data.title || ''}
+                </div>
+            `;
+            return card;
+        }
+
+        // 5. Autoplay logic (Intersection Observer)
+        function setupVideoAutoplay() {
+            const videos = document.querySelectorAll('.video-player');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    const wrapper = video.closest('.video-wrapper');
+                    
+                    if (entry.isIntersecting) {
+                        video.play().then(() => {
+                            wrapper.classList.remove('paused');
+                        }).catch(e => {
+                            // Autoplay prevented by browser
+                            wrapper.classList.add('paused');
+                        });
+                    } else {
+                        video.pause();
+                        wrapper.classList.add('paused');
+                    }
+                });
+            }, { threshold: 0.6 }); // Play when 60% of video is visible
+
+            videos.forEach(video => observer.observe(video));
+        }
+
+        // Global Window Functions for inline HTML clicks
+        window.togglePlay = function(wrapper) {
+            const video = wrapper.querySelector('video');
+            if (video.paused) {
+                video.play();
+                wrapper.classList.remove('paused');
+            } else {
+                video.pause();
+                wrapper.classList.add('paused');
+            }
+        };
+
+        window.toggleLike = function(btn) {
+            btn.classList.toggle('liked');
+            const span = btn.querySelector('span');
+            let count = parseInt(span.innerText);
+            span.innerText = btn.classList.contains('liked') ? count + 1 : count - 1;
+            // Note: In a real app, update Firestore like count here.
+        };
+    </script>
+</body>
+</html>
