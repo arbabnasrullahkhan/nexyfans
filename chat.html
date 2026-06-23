@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Community Chat - Nexy Fans</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .chat-header {
+            height: 70px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+
+        .group-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .group-icon {
+            width: 40px;
+            height: 40px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .group-details h2 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .group-details p {
+            font-size: 12px;
+            color: #10b981; /* Online green */
+            font-weight: 500;
+        }
+
+        .limit-badge {
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        /* Chat Area */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scroll-behavior: smooth;
+        }
+
+        /* Desktop centering */
+        @media (min-width: 768px) {
+            .chat-messages, .input-area {
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+            }
+            body { padding-left: 80px; } /* Sidebar offset */
+        }
+
+        .message {
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+        }
+
+        .message.received {
+            align-self: flex-start;
+        }
+
+        .sender-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 4px;
+            margin-left: 4px;
+        }
+
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .sent .message-bubble {
+            background: #1a1a1a;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .received .message-bubble {
+            background: white;
+            color: #1a1a1a;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .message-time {
+            font-size: 10px;
+            margin-top: 4px;
+            opacity: 0.6;
+            align-self: flex-end;
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 16px 20px;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding-bottom: 90px; /* Space for Nav Dock */
+        }
+
+        .message-input {
+            flex: 1;
+            background: #f8fafc;
+            border: 1.5px solid #f1f5f9;
+            padding: 12px 16px;
+            border-radius: 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .message-input:focus {
+            border-color: #1a1a1a;
+            background: white;
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            background: #1a1a1a;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:active { transform: scale(0.9); }
+        .send-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            margin-left: 2px;
+        }
+
+        /* Suspended Notice */
+        .suspended-notice {
+            background: #fef2f2;
+            color: #ef4444;
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Dock Container -->
+    <div id="navDockContainer"></div>
+
+    <!-- Header -->
+    <header class="chat-header">
+        <div class="group-info">
+            <div class="group-icon">N</div>
+            <div class="group-details">
+                <h2>Nexy Global</h2>
+                <p>● Community Group</p>
+            </div>
+        </div>
+        <div class="limit-badge" id="msgLimitDisplay">Loading limit...</div>
+    </header>
+
+    <div class="suspended-notice" id="suspendedNotice">
+        Your account is suspended. You cannot send messages.
+    </div>
+
+    <!-- Chat Messages -->
+    <main class="chat-messages" id="chatBox">
+        <!-- Messages loaded here -->
+    </main>
+
+    <!-- Input Area -->
+    <div class="input-area">
+        <input type="text" id="msgInput" class="message-input" placeholder="Type a message..." maxlength="200">
+        <button id="sendBtn" class="send-btn">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z"/></svg>
+        </button>
+    </div>
+
+    <!-- App Logic -->
+    <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            collection, addDoc, query, orderBy, limit, 
+            onSnapshot, serverTimestamp, doc, getDoc, updateDoc 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db } from "./imp/firebase-config.js";
+
+        let currentUser = null;
+        let userData = null;
+        const MAX_DAILY_MSGS = 4;
+
+        // 1. Check Auth
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.replace("login.html");
+            } else {
+                currentUser = user;
+                await loadUserData();
+                listenForMessages();
+            }
+        });
+
+        // 2. Inject Nav Dock
+        async function loadNavDock() {
+            try {
+                const response = await fetch('./imp/nav-dock-button.html');
+                if (response.ok) {
+                    const html = await response.text();
+                    document.getElementById('navDockContainer').innerHTML = html;
+                    const scripts = document.getElementById('navDockContainer').getElementsByTagName('script');
+                    for (let script of scripts) eval(script.innerText);
+                }
+            } catch (e) {}
+        }
+        loadNavDock();
+
+        // 3. Load User Specific Data (Rate Limits)
+        async function loadUserData() {
+            const userRef = doc(db, "users", currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            
+            if (userSnap.exists()) {
+                userData = userSnap.data();
+                
+                // Check Suspension
+                if (userData.status === "suspended") {
+                    document.getElementById('suspendedNotice').style.display = 'block';
+                    document.getElementById('msgInput').disabled = true;
+                    document.getElementById('sendBtn').disabled = true;
+                }
+
+                // Daily Limit Logic
+                updateLimitUI();
+            }
+        }
+
+        function updateLimitUI() {
+            const today = new Date().toDateString();
+            const lastMsgDate = userData.lastMsgDate || "";
+            
+            let count = userData.dailyMessageCount || 0;
+            if (lastMsgDate !== today) {
+                count = 0; // Reset for new day
+            }
+            
+            const remaining = MAX_DAILY_MSGS - count;
+            document.getElementById('msgLimitDisplay').innerText = `Daily limit: ${remaining}/${MAX_DAILY_MSGS} left`;
+            
+            if (remaining <= 0) {
+                document.getElementById('msgInput').placeholder = "Limit reached for today";
+                document.getElementById('sendBtn').disabled = true;
+            }
+        }
+
+        // 4. Real-time Message Listener
+        function listenForMessages() {
+            const chatBox = document.getElementById('chatBox');
+            const q = query(collection(db, "chats"), orderBy("createdAt", "asc"), limit(50));
+
+            onSnapshot(q, (snapshot) => {
+                chatBox.innerHTML = ""; // Clear for re-render or handle changes
+                snapshot.forEach((doc) => {
+                    const msg = doc.data();
+                    renderMessage(msg);
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
+
+        function renderMessage(msg) {
+            const chatBox = document.getElementById('chatBox');
+            const isMe = msg.userId === currentUser.uid;
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${isMe ? 'sent' : 'received'}`;
+            
+            const time = msg.createdAt ? new Date(msg.createdAt.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "...";
+
+            msgDiv.innerHTML = `
+                ${!isMe ? `<span class="sender-name">${msg.username}</span>` : ''}
+                <div class="message-bubble">
+                    ${msg.text}
+                </div>
+                <span class="message-time">${time}</span>
+            `;
+            chatBox.appendChild(msgDiv);
+        }
+
+        // 5. Send Message Logic
+        const sendBtn = document.getElementById('sendBtn');
+        const msgInput = document.getElementById('msgInput');
+
+        sendBtn.addEventListener('click', async () => {
+            const text = msgInput.value.trim();
+            if (!text || !userData) return;
+
+            // Double check local rate limit
+            const today = new Date().toDateString();
+            let count = (userData.lastMsgDate === today) ? (userData.dailyMessageCount || 0) : 0;
+
+            if (count >= MAX_DAILY_MSGS) {
+                alert("Daily limit reached!");
+                return;
+            }
+
+            try {
+                sendBtn.disabled = true;
+
+                // A. Add Message
+                await addDoc(collection(db, "chats"), {
+                    userId: currentUser.uid,
+                    username: userData.username || "User",
+                    text: text,
+                    createdAt: serverTimestamp()
+                });
+
+                // B. Update User Count
+                const userRef = doc(db, "users", currentUser.uid);
+                const newCount = count + 1;
+                await updateDoc(userRef, {
+                    dailyMessageCount: newCount,
+                    lastMsgDate: today
+                });
+
+                // C. Update Local State
+                userData.dailyMessageCount = newCount;
+                userData.lastMsgDate = today;
+                
+                msgInput.value = "";
+                updateLimitUI();
+                sendBtn.disabled = false;
+
+            } catch (error) {
+                console.error("Error sending:", error);
+                sendBtn.disabled = false;
+            }
+        });
+
+        // Enter key to send
+        msgInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendBtn.click();
+        });
+    </script>
+</body>
+</html>
