@@ -11,10 +11,12 @@
     <style>
         :root {
             --primary: #000000;
-            --accent: #d4af37; /* Luxury Gold */
+            --accent: #6366f1;
             --bg: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.8);
-            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -22,259 +24,294 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
-            color: #0f172a;
+            color: var(--text-main);
             overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
         }
 
-        /* --- LUXURY HEADER --- */
-        .studio-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
-            background: var(--glass); backdrop-filter: blur(20px);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000; border-bottom: 1px solid #e2e8f0;
+        .luxury-mesh {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at 0% 0%, #e2e8f0 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, #f1f5f9 0%, transparent 50%);
         }
 
-        .header-content { width: 100%; max-width: 500px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-        .back-btn { background: none; border: none; cursor: pointer; }
-        .header-title { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+        .container { width: 100%; max-width: 500px; padding: 40px 20px; }
 
-        /* --- MAIN LAYOUT --- */
-        .main-layout { padding: 90px 20px 120px; max-width: 550px; margin: 0 auto; }
+        /* Header */
+        .header-nav { display: flex; align-items: center; margin-bottom: 30px; }
+        .back-btn { background: white; border: 1.5px solid var(--border); border-radius: 50%; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: var(--transition); }
+        .back-btn:active { transform: scale(0.9); background: #f8fafc; }
+        .header-nav h2 { flex: 1; text-align: center; font-size: 20px; font-weight: 800; margin-right: 45px; }
 
-        @media (min-width: 768px) { body { padding-left: 80px; } }
-
-        /* --- CREATOR IDENTITY CARD --- */
-        .creator-identity {
-            background: var(--primary); color: white; padding: 20px;
-            border-radius: 24px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .creator-avatar {
-            width: 50px; height: 50px; background: var(--accent); border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-weight: 800; color: black;
-        }
-
-        .creator-details h4 { font-size: 14px; opacity: 0.7; font-weight: 500; }
-        .creator-details h3 { font-size: 18px; font-weight: 800; }
-
-        /* --- UPLOAD FORM --- */
+        /* Upload Card */
         .glass-card {
-            background: var(--glass); backdrop-filter: blur(20px);
-            border: 1px solid white; border-radius: 30px; padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
-            animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid white; border-radius: 35px; padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
         }
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; margin-left: 5px; }
+        /* Selector Area */
+        .upload-selector {
+            width: 100%; border: 2px dashed #cbd5e1; border-radius: 25px;
+            padding: 40px 20px; text-align: center; cursor: pointer;
+            transition: var(--transition); background: #fcfcfc;
+        }
+        .upload-selector:hover { border-color: var(--primary); background: #f8fafc; }
+        .upload-selector svg { width: 50px; height: 50px; fill: #94a3b8; margin-bottom: 15px; }
+        .upload-selector h3 { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+        .upload-selector p { font-size: 12px; color: #64748b; font-weight: 500; }
 
-        input, select, textarea {
+        /* Preview Area */
+        .preview-box { display: none; width: 100%; position: relative; border-radius: 25px; overflow: hidden; background: #000; aspect-ratio: 9/16; margin-bottom: 25px; }
+        .preview-box video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        .remove-vid { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+
+        /* Form Styling */
+        .form-section { margin-top: 25px; display: none; animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .group { margin-bottom: 20px; }
+        label { display: block; font-size: 12px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 8px; margin-left: 5px; letter-spacing: 0.5px; }
+        
+        input, textarea, select {
             width: 100%; padding: 16px; border-radius: 18px; border: 1.5px solid #e2e8f0;
-            background: white; font-size: 15px; font-weight: 600; outline: none; transition: var(--transition);
+            background: white; font-size: 15px; font-weight: 500; outline: none; transition: var(--transition);
         }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 5px rgba(0,0,0,0.03); }
 
-        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1); }
+        /* Progress Bar */
+        .progress-container { display: none; margin: 25px 0; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+        .progress-track { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.3s ease; }
 
-        textarea { height: 100px; resize: none; }
-
-        .row { display: flex; gap: 12px; }
-        .row .form-group { flex: 1; }
-
-        /* --- PUBLISH BUTTON --- */
-        .btn-publish {
-            width: 100%; padding: 20px; border-radius: 20px; background: var(--primary);
-            color: white; border: none; font-size: 16px; font-weight: 800;
-            cursor: pointer; transition: var(--transition); margin-top: 10px;
+        /* Submit Button */
+        .btn-elite {
+            width: 100%; padding: 18px; border-radius: 20px; background: var(--primary);
+            color: white; font-size: 16px; font-weight: 800; border: none; cursor: pointer;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); transition: var(--transition);
             display: flex; justify-content: center; align-items: center; gap: 10px;
         }
+        .btn-elite:active { transform: scale(0.96); }
+        .btn-elite:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        .btn-publish:active { transform: scale(0.96); opacity: 0.9; }
-        .btn-publish svg { fill: var(--accent); }
-
-        /* --- SUCCESS MODAL --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(15px);
-            display: none; justify-content: center; align-items: center; z-index: 2000; padding: 24px;
-        }
-
-        .modal {
-            background: white; padding: 40px 30px; border-radius: 35px; width: 100%; max-width: 380px;
-            text-align: center; animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .modal-icon { width: 80px; height: 80px; background: #f0fdf4; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; }
-        .modal-icon svg { width: 40px; height: 40px; fill: #22c55e; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes modalPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
-    <div id="navDockContainer"></div>
-    <div id="loaderContainer"></div>
+    <div class="luxury-mesh"></div>
 
-    <header class="studio-header">
-        <div class="header-content">
-            <button class="back-btn" onclick="history.back()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            </button>
-            <span class="header-title">Elite Studio</span>
-            <div style="width: 24px;"></div>
-        </div>
-    </header>
-
-    <main class="main-layout">
-        
-        <!-- Creator Identity Card -->
-        <div class="creator-identity">
-            <div class="creator-avatar" id="creatorAvatar">U</div>
-            <div class="creator-details">
-                <h4>Posting as</h4>
-                <h3 id="creatorName">Loading Elite Name...</h3>
+    <div class="container">
+        <nav class="header-nav">
+            <div class="back-btn" onclick="history.back()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             </div>
-        </div>
+            <h2>Elite Studio</h2>
+        </nav>
 
         <div class="glass-card">
-            <form id="uploadForm">
-                <div class="form-group">
-                    <label>Video Elite Link (URL)</label>
-                    <input type="url" id="vUrl" placeholder="Enter video link (Instagram, YT, or Direct)" required>
-                </div>
+            <!-- Video Picker -->
+            <div class="upload-selector" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04ZM14 13V17H10V13H7L12 8L17 13H14Z"/></svg>
+                <h3>Choose Luxury Video</h3>
+                <p>Support for 4K / 1GB+ files</p>
+                <input type="file" id="fileInput" hidden accept="video/*">
+            </div>
 
-                <div class="form-group">
+            <!-- Preview -->
+            <div class="preview-box" id="previewBox">
+                <button class="remove-vid" id="removeVid">
+                    <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"/></svg>
+                </button>
+                <video id="videoPreview" autoplay muted loop playsinline></video>
+            </div>
+
+            <!-- Form -->
+            <div class="form-section" id="formSection">
+                <div class="group">
                     <label>Elite Title</label>
-                    <input type="text" id="vTitle" placeholder="Give your content a title..." required>
+                    <input type="text" id="videoTitle" placeholder="Catchy title for your elite content...">
                 </div>
 
-                <div class="form-group">
+                <div class="group">
                     <label>Elite Description</label>
-                    <textarea id="vDesc" placeholder="Explain your elite vibe..."></textarea>
+                    <textarea id="videoDesc" placeholder="Tell the world about your luxury vibe..." rows="3"></textarea>
                 </div>
 
-                <div class="row">
-                    <div class="form-group">
+                <div style="display: flex; gap: 12px;">
+                    <div class="group" style="flex: 1;">
                         <label>Category</label>
-                        <select id="vCategory">
-                            <option value="luxury">Luxury Life</option>
-                            <option value="trending">Trending</option>
+                        <select id="category">
+                            <option value="luxury">Luxury</option>
+                            <option value="action">Action</option>
+                            <option value="life">Life Style</option>
                             <option value="gaming">Gaming</option>
-                            <option value="community">Community</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Target Audience</label>
-                        <select id="vTarget">
+                    <div class="group" style="flex: 1;">
+                        <label>Target</label>
+                        <select id="target">
                             <option value="male">Elite Male</option>
                             <option value="female">Elite Female</option>
-                            <option value="kids">Elite Kids</option>
+                            <option value="kids">Kids Hub</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--primary);">
-                        <input type="checkbox" style="width: 18px; height: 18px;" required>
-                        I confirm this content is 18+ safe.
-                    </label>
+                <div class="group">
+                    <label>Tags (Comma separated)</label>
+                    <input type="text" id="tags" placeholder="luxury, viral, elite, trending">
                 </div>
 
-                <button type="submit" class="btn-publish" id="publishBtn">
-                    <span>Publish to Hub</span>
-                    <div class="spinner" id="btnSpinner"></div>
-                    <svg width="20" height="20" viewBox="0 0 24 24"><path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z"/></svg>
-                </button>
-            </form>
-        </div>
-    </main>
+                <!-- Progress -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-info">
+                        <span id="statusTxt">Optimizing Video...</span>
+                        <span id="percent">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
 
-    <!-- Success Modal -->
-    <div class="modal-overlay" id="successModal">
-        <div class="modal">
-            <div class="modal-icon">
-                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <button class="btn-elite" id="publishBtn">
+                    <span>Publish Elite Post</span>
+                    <div class="spinner" id="btnSpinner"></div>
+                </button>
             </div>
-            <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 10px;">Elite Published!</h2>
-            <p style="color: #64748b; font-size: 15px; margin-bottom: 30px;">Your content is now live on Nexy Hub. Start gaining elite views.</p>
-            <button class="btn-publish" onclick="window.location.href='home.html'">Return to Hub</button>
         </div>
     </div>
 
+    <!-- Firebase System -->
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { auth, db } from "./imp/firebase-config.js";
+        import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        import { collection, addDoc, doc, updateDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db, storage } from "./imp/firebase-config.js";
 
-        let currentEliteUser = null;
+        let currentUser = null;
+        let selectedFile = null;
 
-        // 1. Auth Sync
+        // 1. Auth Check
         onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.replace("login.html");
-            } else {
+            if (!user) window.location.replace("login.html");
+            else {
                 const snap = await getDoc(doc(db, "users", user.uid));
-                if (snap.exists()) {
-                    currentEliteUser = snap.data();
-                    document.getElementById('creatorName').innerText = currentEliteUser.name || "Elite Creator";
-                    document.getElementById('creatorAvatar').innerText = (currentEliteUser.name || "E").charAt(0).toUpperCase();
-                }
+                currentUser = snap.exists() ? snap.data() : user;
             }
         });
 
-        // 2. Publish Logic
-        const form = document.getElementById('uploadForm');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const btn = document.getElementById('publishBtn');
-            const spinner = document.getElementById('btnSpinner');
-            
-            btn.children[0].style.display = 'none';
-            btn.children[2].style.display = 'none';
-            spinner.style.display = 'block';
+        // 2. File Selection & Preview
+        const fileInput = document.getElementById('fileInput');
+        const previewBox = document.getElementById('previewBox');
+        const dropZone = document.getElementById('dropZone');
+        const formSection = document.getElementById('formSection');
+        const videoPreview = document.getElementById('videoPreview');
 
-            const videoData = {
-                videoURL: document.getElementById('vUrl').value,
-                title: document.getElementById('vTitle').value,
-                desc: document.getElementById('vDesc').value,
-                category: document.getElementById('vCategory').value,
-                target: document.getElementById('vTarget').value,
-                userId: currentEliteUser.uid,
-                username: currentEliteUser.name,
-                views: 0,
-                likes: 0,
-                status: 'approved', // Auto-approved for this version
-                createdAt: serverTimestamp()
-            };
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file || !file.type.startsWith('video/')) return;
+            
+            selectedFile = file;
+            videoPreview.src = URL.createObjectURL(file);
+            
+            dropZone.style.display = 'none';
+            previewBox.style.display = 'block';
+            formSection.style.display = 'block';
+        };
+
+        document.getElementById('removeVid').onclick = () => {
+            selectedFile = null;
+            location.reload();
+        };
+
+        // 3. Optimized Publish Logic
+        document.getElementById('publishBtn').onclick = async () => {
+            if (!selectedFile || !currentUser) return;
+
+            const publishBtn = document.getElementById('publishBtn');
+            const spinner = document.getElementById('btnSpinner');
+            const progCont = document.getElementById('progressContainer');
+            const progFill = document.getElementById('progressFill');
+            const percent = document.getElementById('percent');
+            const statusTxt = document.getElementById('statusTxt');
+
+            publishBtn.disabled = true;
+            publishBtn.querySelector('span').style.display = 'none';
+            spinner.style.display = 'block';
+            progCont.style.display = 'block';
+
+            const title = document.getElementById('videoTitle').value || "Elite Luxury Video";
+            const desc = document.getElementById('videoDesc').value || "";
+            const category = document.getElementById('category').value;
+            const target = document.getElementById('target').value;
+            const tags = document.getElementById('tags').value.split(',').map(t => t.trim().toLowerCase());
 
             try {
-                await addDoc(collection(db, "videos"), videoData);
-                document.getElementById('successModal').style.display = 'flex';
+                // Generate secure filename
+                const fileName = `elite_hub/${currentUser.uid}/${Date.now()}_nexy.mp4`;
+                const storageRef = ref(storage, fileName);
+                
+                // Start High-Performance Upload
+                const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const prog = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        progFill.style.width = prog + '%';
+                        percent.innerText = Math.round(prog) + '%';
+                        if(prog < 99) statusTxt.innerText = "Syncing with CDN...";
+                        else statusTxt.innerText = "Finalizing Elite Stream...";
+                    }, 
+                    (error) => { alert("Upload failed: " + error.message); location.reload(); }, 
+                    async () => {
+                        const finalURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        
+                        // Save Metadata to Firestore (Optimized for Search)
+                        await addDoc(collection(db, "videos"), {
+                            userId: currentUser.uid,
+                            username: currentUser.name || "Elite Creator",
+                            title: title,
+                            title_lowercase: title.toLowerCase(),
+                            description: desc,
+                            category: category,
+                            target: target,
+                            tags: tags,
+                            videoURL: finalURL, // In production, this would be the transcoded HLS link
+                            views: 0,
+                            likes: 0,
+                            status: "approved", // User request: auto publish
+                            createdAt: serverTimestamp()
+                        });
+
+                        // Update Last Upload for the 7-day rule
+                        await updateDoc(doc(db, "users", currentUser.uid), {
+                            lastUploadDate: serverTimestamp()
+                        });
+
+                        window.location.replace('home.html');
+                    }
+                );
+
             } catch (err) {
-                alert("Upload Failed: " + err.message);
-                btn.children[0].style.display = 'block';
-                btn.children[2].style.display = 'block';
-                spinner.style.display = 'none';
+                console.error(err);
+                alert("Something went wrong with the elite hub.");
             }
+        };
+
+        // Anti-Download Security
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.querySelectorAll('video').forEach(v => {
+            v.setAttribute('controlsList', 'nodownload nofullscreen noremoteplayback');
+            v.disablePictureInPicture = true;
         });
 
-        // Inject Nav & Loader
-        const inject = (url, target) => {
-            fetch(url).then(r => r.text()).then(html => {
-                document.getElementById(target).innerHTML = html;
-                const scripts = document.getElementById(target).getElementsByTagName('script');
-                for (let s of scripts) eval(s.innerText);
-            });
-        };
-        inject('./imp/nav-dock-button.html', 'navDockContainer');
-        inject('./imp/loader.html', 'loaderContainer');
     </script>
 </body>
 </html>
