@@ -3,133 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexy Fans</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Nexy Hub | Premium Video Social</title>
     
+    <!-- Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg: #ffffff;
-            --accent: #000000;
+            --primary: #000000;
+            --surface: #ffffff;
+            --accent: #6366f1;
             --font: 'Plus Jakarta Sans', sans-serif;
+            --transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
 
         body {
             font-family: var(--font);
-            background: var(--bg);
+            background-color: #000; /* Deep start */
             height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
         }
 
-        /* Abstract Premium Background */
-        .mesh-gradient {
-            position: absolute;
+        /* Luxury Mesh Background */
+        .stage {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0;
-            background: radial-gradient(circle at 0% 0%, #f3f4f6 0%, transparent 50%),
-                        radial-gradient(circle at 100% 100%, #e5e7eb 0%, transparent 50%);
-            filter: blur(60px);
+            background: #ffffff;
+            z-index: 1;
+            overflow: hidden;
         }
 
-        .splash-content {
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+
+        .blob-1 { top: -100px; left: -100px; }
+        .blob-2 { bottom: -100px; right: -100px; animation-delay: -5s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        /* Splash Content */
+        .container {
             position: relative;
-            z-index: 1;
-            text-align: center;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
         }
 
-        /* Animated Luxury Logo */
-        .logo-wrap {
-            width: 90px;
-            height: 90px;
-            background: var(--accent);
-            border-radius: 28px;
+        /* Luxury Glass Logo */
+        .logo-box {
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            animation: logoAppear 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8);
+            opacity: 0;
+            animation: logoIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        .logo-wrap svg {
-            width: 45px;
-            height: 45px;
+        .logo-box svg {
+            width: 44px;
+            height: 44px;
             fill: #fff;
-            animation: iconRotate 3s infinite ease-in-out;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
         }
 
         .app-name {
-            margin-top: 24px;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
-            letter-spacing: -1px;
+            color: var(--primary);
+            letter-spacing: -1.5px;
+            margin-bottom: 8px;
             opacity: 0;
-            transform: translateY(10px);
-            animation: textFadeUp 0.8s 0.5s ease-out forwards;
+            transform: translateY(20px);
+            animation: textIn 0.8s 0.6s ease-out forwards;
         }
 
-        /* Loader Bar */
-        .loader-track {
-            width: 120px;
-            height: 4px;
-            background: #e5e7eb;
+        .app-tagline {
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: textIn 0.8s 0.8s ease-out forwards;
+        }
+
+        /* Premium Loader */
+        .loader-bar {
+            width: 140px;
+            height: 3px;
+            background: #f1f5f9;
             border-radius: 10px;
-            margin-top: 30px;
+            margin-top: 40px;
             overflow: hidden;
             opacity: 0;
-            animation: fadeIn 0.5s 0.8s forwards;
+            animation: fadeIn 0.5s 1s forwards;
         }
 
-        .loader-fill {
+        .loader-progress {
             width: 0%;
             height: 100%;
-            background: var(--accent);
-            animation: fillProgress 2s ease-in-out forwards;
+            background: var(--primary);
+            border-radius: 10px;
+            animation: loading 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        @keyframes logoAppear {
-            0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        /* Animations */
+        @keyframes logoIn {
+            to { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes textFadeUp {
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes textIn {
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        @keyframes fillProgress {
+        @keyframes loading {
             to { width: 100%; }
         }
 
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        .fade-out {
-            animation: fadeOutScreen 0.6s forwards;
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
-        @keyframes fadeOutScreen {
-            to { opacity: 0; transform: scale(1.05); }
+        .exit-animation {
+            animation: exit 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes exit {
+            to { opacity: 0; transform: scale(1.05); filter: blur(10px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="mesh-gradient"></div>
+    <div class="stage">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
 
-    <div class="splash-content" id="splash">
-        <div class="logo-wrap">
-            <svg viewBox="0 0 24 24"><path d="M8 5.14V18.86C8 19.75 8.97 20.29 9.72 19.82L20.59 13.06C21.28 12.63 21.28 11.64 20.59 11.21L9.72 4.45C8.97 3.98 8 4.52 8 5.14Z"/></svg>
+    <div class="container" id="mainContent">
+        <div class="logo-box">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+            </svg>
         </div>
+        
         <h1 class="app-name">Nexy Hub</h1>
-        <div class="loader-track">
-            <div class="loader-fill"></div>
+        <p class="app-tagline">Premium Content</p>
+
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
         </div>
     </div>
 
@@ -137,23 +192,26 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { auth } from "./imp/firebase-config.js";
 
-        const MIN_TIME = 2500;
-        const start = Date.now();
+        // Minimum splash duration for premium feel
+        const SPLASH_MIN_TIME = 2800; 
+        const startTime = Date.now();
 
         onAuthStateChanged(auth, (user) => {
-            const diff = Date.now() - start;
-            const delay = Math.max(0, MIN_TIME - diff);
+            const timeElapsed = Date.now() - startTime;
+            const remainingTime = Math.max(0, SPLASH_MIN_TIME - timeElapsed);
 
             setTimeout(() => {
-                document.body.classList.add('fade-out');
+                const content = document.getElementById('mainContent');
+                content.classList.add('exit-animation');
+
                 setTimeout(() => {
                     if (user) {
                         window.location.replace("home.html");
                     } else {
                         window.location.replace("welcome.html");
                     }
-                }, 500);
-            }, delay);
+                }, 600);
+            }, remainingTime);
         });
     </script>
 </body>
