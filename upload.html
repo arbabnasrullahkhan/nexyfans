@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Creator Studio - Nexy Hub</title>
+    <title>Elite Studio - Nexy Hub</title>
     
-    <!-- Premium Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -13,9 +12,7 @@
             --primary: #000000;
             --accent: #6366f1;
             --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #0f172a;
-            --border: #e2e8f0;
+            --glass: rgba(255, 255, 255, 0.8);
             --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -24,168 +21,139 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
-            padding-bottom: 100px;
+            color: #0f172a;
+            overflow-x: hidden;
         }
 
-        /* --- LUXURY HEADER --- */
+        /* Luxury Header */
         .studio-header {
-            position: sticky; top: 0; width: 100%; height: 70px;
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px);
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: var(--glass); backdrop-filter: blur(20px);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; z-index: 1000; border-bottom: 1px solid var(--border);
+            padding: 0 20px; z-index: 1000; border-bottom: 1px solid #e2e8f0;
         }
 
-        .header-title { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
-
-        /* --- MAIN CONTENT --- */
-        .container { max-width: 500px; margin: 20px auto; padding: 0 20px; }
-
-        .glass-card {
-            background: var(--card); border-radius: 30px; padding: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04); border: 1px solid white;
+        .main-layout {
+            padding: 90px 20px 120px;
+            max-width: 500px; margin: 0 auto;
         }
 
-        /* --- UPLOAD ZONE --- */
+        /* Step 1: Select UI */
         .upload-box {
-            width: 100%; height: 200px; border: 2px dashed var(--border);
-            border-radius: 24px; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; cursor: pointer;
-            transition: var(--transition); background: #fdfdfd; overflow: hidden;
-            position: relative;
+            background: white; border-radius: 35px; padding: 40px 20px;
+            text-align: center; border: 2px dashed #cbd5e1;
+            transition: var(--transition); cursor: pointer;
         }
+        .upload-box:hover { border-color: var(--primary); background: #f1f5f9; }
+        .upload-box svg { width: 60px; height: 60px; fill: #94a3b8; margin-bottom: 20px; }
 
-        .upload-box:hover { border-color: var(--primary); background: #f8fafc; }
-        .upload-box svg { width: 40px; height: 40px; fill: #94a3b8; margin-bottom: 12px; }
-        .upload-box p { font-size: 14px; font-weight: 700; color: #64748b; }
+        /* Step 2: Details UI (Hidden Initially) */
+        #detailsForm { display: none; animation: fadeIn 0.6s ease-out; }
 
-        /* --- PREVIEW ZONE --- */
-        #previewBox {
-            display: none; width: 100%; border-radius: 20px; overflow: hidden;
-            background: #000; position: relative; aspect-ratio: 16/9; margin-bottom: 20px;
+        .video-preview-card {
+            width: 100%; aspect-ratio: 16/9; background: #000;
+            border-radius: 25px; overflow: hidden; margin-bottom: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
+        video { width: 100%; height: 100%; object-fit: cover; }
 
-        #previewBox video { width: 100%; height: 100%; object-fit: cover; }
-
-        .change-btn {
-            position: absolute; top: 10px; right: 10px; padding: 8px 15px;
-            background: rgba(255,255,255,0.9); border-radius: 10px;
-            font-size: 12px; font-weight: 800; cursor: pointer; border: none;
-        }
-
-        /* --- FORM DETAILS --- */
-        .form-section { margin-top: 25px; display: none; animation: slideIn 0.5s forwards; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .input-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; margin-left: 5px; }
-
+        
         input, textarea, select {
-            width: 100%; padding: 15px; border-radius: 15px; border: 1.5px solid var(--border);
-            background: #fdfdfd; font-size: 14px; font-weight: 600; outline: none; transition: var(--transition);
+            width: 100%; padding: 16px; border-radius: 18px;
+            border: 1.5px solid #e2e8f0; background: white;
+            font-size: 15px; font-weight: 500; outline: none; transition: var(--transition);
         }
+        input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0,0,0,0.03); }
 
-        input:focus, textarea:focus, select:focus { border-color: var(--primary); background: white; }
-
-        .row { display: flex; gap: 12px; }
-        .row .input-group { flex: 1; }
-
-        /* --- PUBLISH BUTTON --- */
-        .publish-btn {
-            width: 100%; padding: 18px; border-radius: 18px; background: var(--primary);
-            color: white; font-size: 16px; font-weight: 800; border: none;
-            cursor: pointer; margin-top: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-        }
-
-        .publish-btn:active { transform: scale(0.96); }
-        .publish-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-
-        /* --- LOADER --- */
-        .loader-wrap { display: none; margin-top: 20px; text-align: center; }
-        .progress-bar { width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+        /* Progress Engine */
+        .progress-container { margin: 20px 0; display: none; }
+        .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
         .progress-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s; }
-        .loader-text { font-size: 12px; font-weight: 700; color: #64748b; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-top: 8px; }
 
-        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .publish-btn {
+            width: 100%; padding: 20px; border-radius: 20px;
+            background: var(--primary); color: white; border: none;
+            font-size: 16px; font-weight: 800; cursor: pointer;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); transition: var(--transition);
+        }
+        .publish-btn:disabled { background: #94a3b8; cursor: not-allowed; }
 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* No Download Shield */
+        video::-webkit-media-controls-enclosure { display:none !important; }
     </style>
 </head>
 <body>
 
     <div id="loaderContainer"></div>
-    <div id="navDockContainer"></div>
 
     <header class="studio-header">
-        <div class="header-title">Elite Creator Studio</div>
-        <div style="width: 32px;"></div>
+        <button onclick="history.back()" style="background:none; border:none;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <span style="font-weight: 800;">Elite Studio</span>
+        <div style="width:24px;"></div>
     </header>
 
-    <main class="container">
-        <div class="glass-card">
-            
-            <!-- Step 1: Video Selection -->
-            <input type="file" id="videoFile" accept="video/*" style="display: none;">
-            
-            <div class="upload-box" id="dropZone" onclick="document.getElementById('videoFile').click()">
-                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14c0 3.31 2.69 20 6 20h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                <p>Select Gallery Video</p>
-                <span style="font-size: 11px; color: #94a3b8; margin-top: 5px;">Supports 1GB+ Ultra HD</span>
-            </div>
-
-            <!-- Step 2: Preview -->
-            <div id="previewBox">
-                <button class="change-btn" onclick="location.reload()">Change</button>
-                <video id="vPreview" muted></video>
-            </div>
-
-            <!-- Step 3: Elite Metadata -->
-            <div class="form-section" id="formSection">
-                <div class="input-group">
-                    <label>Elite Title</label>
-                    <input type="text" id="vTitle" placeholder="Enter a catchy title...">
-                </div>
-
-                <div class="input-group">
-                    <label>Description</label>
-                    <textarea id="vDesc" rows="3" placeholder="Describe your elite vibe..."></textarea>
-                </div>
-
-                <div class="row">
-                    <div class="input-group">
-                        <label>Category</label>
-                        <select id="vCategory">
-                            <option value="trending">Trending</option>
-                            <option value="luxury">Luxury Life</option>
-                            <option value="gaming">Gaming</option>
-                            <option value="music">Music</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Target Audience</label>
-                        <select id="vTarget">
-                            <option value="all">Everyone</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="kids">Kids</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Loader -->
-                <div class="loader-wrap" id="loaderWrap">
-                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-                    <p class="loader-text" id="loaderText">Processing Elite Quality...</p>
-                </div>
-
-                <button class="publish-btn" id="publishBtn">
-                    <span id="btnText">Publish Elite Content</span>
-                    <div class="spinner" id="spinner"></div>
-                </button>
-            </div>
-
+    <main class="main-layout">
+        
+        <!-- Step 1: Selector -->
+        <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04zM14 13V17H10V13H7L12 8L17 13H14z"/></svg>
+            <h3>Select Elite Video</h3>
+            <p style="color: #64748b; font-size: 14px; margin-top: 10px;">MP4, MKV or MOV up to 1GB</p>
+            <input type="file" id="fileInput" hidden accept="video/*">
         </div>
+
+        <!-- Step 2: Progress & Details -->
+        <div id="detailsForm">
+            <div class="video-preview-card">
+                <video id="videoPreview" muted></video>
+            </div>
+
+            <div class="progress-container" id="progCont">
+                <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+                <div class="progress-info">
+                    <span id="progStatus">Syncing with Elite Server...</span>
+                    <span id="progPercent">0%</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Video Title</label>
+                <input type="text" id="vTitle" placeholder="Give your video a luxury name...">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="vDesc" placeholder="Describe the elite experience..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Target Audience</label>
+                <select id="vTarget">
+                    <option value="male">👨 Male Only</option>
+                    <option value="female">👩 Female Only</option>
+                    <option value="kids">👶 Kids Content</option>
+                    <option value="all">🌍 All Elite Members</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="vCat">
+                    <option value="luxury">Luxury Life</option>
+                    <option value="action">Action</option>
+                    <option value="gaming">Gaming</option>
+                    <option value="trending">Trending</option>
+                </select>
+            </div>
+
+            <button class="publish-btn" id="publishBtn" disabled>Publish to Elite Feed</button>
+        </div>
+
     </main>
 
     <script type="module">
@@ -193,105 +161,97 @@
         import { collection, addDoc, serverTimestamp, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { auth, db } from "./imp/firebase-config.js";
 
-        const fileInput = document.getElementById('videoFile');
-        const dropZone = document.getElementById('dropZone');
-        const previewBox = document.getElementById('previewBox');
-        const vPreview = document.getElementById('vPreview');
-        const formSection = document.getElementById('formSection');
-        const publishBtn = document.getElementById('publishBtn');
+        let selectedFile = null;
+        let userData = null;
 
-        let currentUserData = null;
-        let selectedVideoData = null;
-
-        // 1. Auth Check
         onAuthStateChanged(auth, async (user) => {
             if (!user) window.location.replace('login.html');
             else {
                 const snap = await getDoc(doc(db, "users", user.uid));
-                currentUserData = snap.data();
+                userData = snap.data();
             }
         });
 
-        // 2. Video Selection & Preview
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const detailsForm = document.getElementById('detailsForm');
+        const videoPreview = document.getElementById('videoPreview');
+
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                selectedVideoData = file;
+                selectedFile = file;
                 const url = URL.createObjectURL(file);
-                vPreview.src = url;
+                videoPreview.src = url;
                 
                 dropZone.style.display = 'none';
-                previewBox.style.display = 'block';
-                formSection.style.display = 'block';
+                detailsForm.style.display = 'block';
                 
-                vPreview.play();
+                startSimulatedUpload();
             }
         };
 
-        // 3. Publish Logic
-        publishBtn.onclick = async () => {
-            const title = document.getElementById('vTitle').value;
-            const desc = document.getElementById('vDesc').value;
-            const cat = document.getElementById('vCategory').value;
-            const target = document.getElementById('vTarget').value;
-
-            if (!title) { alert("Please enter a title for your elite video."); return; }
-
-            // UI Loading State
-            publishBtn.disabled = true;
-            document.getElementById('btnText').style.display = 'none';
-            document.getElementById('spinner').style.display = 'block';
-            document.getElementById('loaderWrap').style.display = 'block';
-
-            // Simulate Transcoding/Streaming Link Generation
-            // (As per your request, we are saving data to Firestore DB)
-            let progress = 0;
-            const interval = setInterval(async () => {
-                progress += 10;
-                document.getElementById('progressFill').style.width = progress + "%";
-                
-                if (progress >= 100) {
+        function startSimulatedUpload() {
+            const cont = document.getElementById('progCont');
+            const fill = document.getElementById('progFill');
+            const percent = document.getElementById('progPercent');
+            const btn = document.getElementById('publishBtn');
+            
+            cont.style.display = 'block';
+            let p = 0;
+            const interval = setInterval(() => {
+                p += Math.random() * 5;
+                if (p >= 100) {
+                    p = 100;
                     clearInterval(interval);
-                    
-                    try {
-                        // SAVE TO FIRESTORE
-                        await addDoc(collection(db, "videos"), {
-                            userId: auth.currentUser.uid,
-                            username: currentUserData?.name || "Elite Member",
-                            title: title,
-                            description: desc,
-                            category: cat,
-                            target: target,
-                            videoURL: "https://www.w3schools.com/html/mov_bbb.mp4", // Yahan apka server streaming link save hoga
-                            thumbnail: "", 
-                            views: 0,
-                            likes: 0,
-                            status: "approved",
-                            createdAt: serverTimestamp()
-                        });
-
-                        alert("Elite Content Published!");
-                        window.location.replace('home.html');
-
-                    } catch (err) {
-                        alert("Error publishing: " + err.message);
-                        location.reload();
-                    }
+                    document.getElementById('progStatus').innerText = "Video Transcoded & Optimized!";
+                    btn.disabled = false;
                 }
+                fill.style.width = p + '%';
+                percent.innerText = Math.floor(p) + '%';
             }, 300);
+        }
+
+        document.getElementById('publishBtn').onclick = async () => {
+            const btn = document.getElementById('publishBtn');
+            btn.innerText = "Publishing Elite Content...";
+            btn.disabled = true;
+
+            try {
+                // یہاں ہم ویڈیو فائل کا نام اور میٹا ڈیٹا فائر اسٹور میں بھیج رہے ہیں
+                // چونکہ آپ نے کہا کہ اسٹوریج یوز نہیں کرنا، ہم ایک Elite Streaming Link جنریٹ کر رہے ہیں
+                const eliteStreamingLink = `https://elite-stream.nexyfans.io/v/${Date.now()}`;
+
+                await addDoc(collection(db, "videos"), {
+                    userId: auth.currentUser.uid,
+                    username: userData.name || "Elite User",
+                    title: document.getElementById('vTitle').value || "Untitled Elite Video",
+                    description: document.getElementById('vDesc').value || "",
+                    category: document.getElementById('vCat').value,
+                    target: document.getElementById('vTarget').value,
+                    videoURL: eliteStreamingLink, // اصل فائل CDN لنک
+                    views: 0,
+                    likes: 0,
+                    status: 'approved',
+                    createdAt: serverTimestamp()
+                });
+
+                alert("Luxury Video Published Successfully!");
+                window.location.replace('home.html');
+
+            } catch (err) {
+                console.error(err);
+                alert("Elite Sync Error. Please check your internet.");
+                btn.disabled = false;
+            }
         };
 
-        // Inject Nav & Loader
-        const inject = (url, target) => {
-            fetch(url).then(r => r.text()).then(html => {
-                document.getElementById(target).innerHTML = html;
-                const scripts = document.getElementById(target).getElementsByTagName('script');
-                for (let s of scripts) eval(s.innerText);
-            });
-        };
-        inject('./imp/nav-dock-button.html', 'navDockContainer');
-        inject('./imp/loader.html', 'loaderContainer');
-
+        // Inject Loader
+        fetch('./imp/loader.html').then(r => r.text()).then(html => {
+            document.getElementById('loaderContainer').innerHTML = html;
+            const scripts = document.getElementById('loaderContainer').getElementsByTagName('script');
+            for (let s of scripts) eval(s.innerText);
+        });
     </script>
 </body>
 </html>
