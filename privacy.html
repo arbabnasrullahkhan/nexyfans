@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Privacy Policy - Nexy Fans</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        /* Top Header */
+        .top-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: #ffffff; display: flex; align-items: center;
+            padding: 0 20px; z-index: 900; border-bottom: 1px solid #f1f5f9;
+        }
+
+        .back-btn { background: none; border: none; cursor: pointer; margin-right: 15px; display: flex; align-items: center; }
+
+        /* Main Layout */
+        .main-layout {
+            padding: 80px 20px 100px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) { body { padding-left: 80px; } }
+
+        .content-card {
+            background: #ffffff; border-radius: 24px; padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        h1 { font-size: 24px; margin-bottom: 20px; letter-spacing: -0.5px; }
+        h2 { font-size: 18px; margin-top: 24px; margin-bottom: 10px; font-weight: 700; }
+        p { font-size: 14px; color: #475569; margin-bottom: 15px; }
+        
+        ul { margin-left: 20px; margin-bottom: 20px; }
+        li { font-size: 14px; color: #475569; margin-bottom: 8px; }
+
+        .data-tag {
+            display: inline-block;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Containers -->
+    <div id="loaderContainer"></div>
+    <div id="navDockContainer"></div>
+
+    <header class="top-header">
+        <button class="back-btn" onclick="history.back()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <span style="font-weight:700">Privacy Policy</span>
+    </header>
+
+    <main class="main-layout">
+        <div class="content-card">
+            <h1>Privacy Policy</h1>
+            <p>Last Updated: June 2024</p>
+
+            <p>At Nexy Fans, we prioritize the safety and privacy of our users. This policy outlines how we collect, store, and protect your personal information.</p>
+
+            <h2>1. Information We Collect</h2>
+            <p>When you register on Nexy Fans, we collect the following data to provide a personalized experience:</p>
+            <div style="margin-bottom: 15px;">
+                <span class="data-tag">Display Name</span>
+                <span class="data-tag">Email Address</span>
+                <span class="data-tag">Phone Number</span>
+                <span class="data-tag">Gender</span>
+                <span class="data-tag">Date of Birth</span>
+            </div>
+
+            <h2>2. How We Use Your Data</h2>
+            <ul>
+                <li><b>Authentication:</b> To verify your identity via Firebase Auth.</li>
+                <li><b>The 7-Day Rule:</b> We track your <code>lastUploadDate</code> to manage account activity status.</li>
+                <li><b>Community Chat:</b> Your messages are stored in Firestore for real-time delivery to group members.</li>
+                <li><b>Video Hosting:</b> Uploaded videos are stored securely in Firebase Storage.</li>
+            </ul>
+
+            <h2>3. Content Safety</h2>
+            <p>We do not share your private videos with third parties without your consent. However, all public uploads are subject to moderation to ensure they comply with our safety guidelines. <b>We do not host or support illegal or non-consensual content.</b></p>
+
+            <h2>4. Third-Party Services</h2>
+            <p>Nexy Fans uses Google Firebase for database, hosting, and authentication. Their privacy policy applies to how data is handled at the infrastructure level.</p>
+
+            <h2>5. Data Deletion</h2>
+            <p>You have the right to request the deletion of your account and all associated data (videos, profile, messages). Please contact us through the Help Center to initiate this process.</p>
+
+            <h2>6. Security</h2>
+            <p>We use industry-standard encryption and Firebase Security Rules to ensure that only you can access or modify your personal information.</p>
+        </div>
+    </main>
+
+    <script>
+        // Helper Injection Logic
+        const inject = (url, target) => {
+            fetch(url).then(r => r.text()).then(html => {
+                document.getElementById(target).innerHTML = html;
+                const scripts = document.getElementById(target).getElementsByTagName('script');
+                for (let s of scripts) eval(s.innerText);
+            });
+        };
+        inject('./imp/loader.html', 'loaderContainer');
+        inject('./imp/nav-dock-button.html', 'navDockContainer');
+    </script>
+</body>
+</html>
