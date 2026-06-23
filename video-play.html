@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elite Cinema - Nexy Hub</title>
+    <title>Nexy Hub - Luxury Cinema</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -11,10 +11,9 @@
         :root {
             --primary: #000000;
             --accent: #6366f1;
-            --bg: #0f172a; /* Dark mode for cinema feel */
-            --card: #1e293b;
-            --glass: rgba(30, 41, 59, 0.7);
-            --text: #f8fafc;
+            --bg: #ffffff;
+            --card: #f8fafc;
+            --border: #e2e8f0;
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -23,202 +22,157 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
+            color: #0f172a;
         }
 
-        /* --- LUXURY PLAYER SECTION --- */
-        .player-section {
-            width: 100%;
-            background: #000;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            aspect-ratio: 16/9;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        /* --- STICKY NAV --- */
+        .player-nav {
+            position: sticky; top: 0; width: 100%; height: 60px;
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px);
+            display: flex; align-items: center; padding: 0 15px;
+            z-index: 1000; border-bottom: 1px solid var(--border);
         }
 
-        @media (min-width: 1024px) {
-            .player-section {
-                height: 70vh;
-                position: relative;
-            }
+        .back-btn {
+            background: none; border: none; cursor: pointer;
+            margin-right: 15px; display: flex; align-items: center;
         }
 
-        #mainVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        /* --- THEATER PLAYER --- */
+        .theater-wrapper {
+            width: 100%; background: #000; position: relative;
+            aspect-ratio: 16/9; display: flex; justify-content: center;
         }
 
-        /* Custom Controls Overlay */
-        .player-controls {
-            position: absolute;
-            bottom: 0; left: 0; width: 100%;
-            padding: 20px;
-            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 100%);
-            display: flex; flex-direction: column; gap: 10px;
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .player-section:hover .player-controls { opacity: 1; }
+        video { width: 100%; height: 100%; max-height: 80vh; }
 
-        .progress-bar {
-            width: 100%; height: 6px; background: rgba(255,255,255,0.2);
-            border-radius: 10px; cursor: pointer; position: relative;
-        }
-        .progress-fill {
-            width: 0%; height: 100%; background: var(--accent); border-radius: 10px;
-        }
+        /* --- VIDEO INFO SECTION --- */
+        .info-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
 
-        .control-btns { display: flex; align-items: center; justify-content: space-between; }
-        .btns-left { display: flex; align-items: center; gap: 20px; }
-        .control-btns svg { width: 24px; fill: white; cursor: pointer; }
+        .video-title { font-size: 20px; font-weight: 800; line-height: 1.4; margin-bottom: 10px; }
 
-        /* --- CONTENT LAYOUT --- */
-        .main-layout {
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
+        .stats-row { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 20px; }
 
-        @media (min-width: 1024px) {
-            .main-layout { grid-template-columns: 1fr 380px; }
+        /* --- INTERACTION BAR --- */
+        .action-bar {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;
+            scrollbar-width: none; border-bottom: 1px solid var(--border); margin-bottom: 20px;
         }
+        .action-bar::-webkit-scrollbar { display: none; }
 
-        /* Video Info */
-        .video-details h1 { font-size: 22px; font-weight: 800; margin-bottom: 12px; line-height: 1.3; }
-        .stats-bar {
-            display: flex; align-items: center; justify-content: space-between;
-            padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .views-count { font-size: 14px; color: #94a3b8; font-weight: 600; }
-        
-        .interaction-btns { display: flex; gap: 15px; }
-        .action-btn {
+        .action-pill {
             padding: 10px 20px; border-radius: 30px; background: var(--card);
-            border: 1px solid rgba(255,255,255,0.1); color: white;
-            font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            border: 1.5px solid var(--border); font-size: 13px; font-weight: 700;
+            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition);
+            white-space: nowrap;
         }
-        .action-btn.liked { background: white; color: black; }
-        .action-btn.liked svg { fill: black; }
+        .action-pill:active { transform: scale(0.95); background: #e2e8f0; }
+        .action-pill svg { width: 18px; height: 18px; }
 
-        /* Uploader Profile */
-        .uploader-box {
+        /* --- CREATOR SECTION --- */
+        .creator-card {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 20px 0;
-        }
-        .profile-info { display: flex; align-items: center; gap: 15px; }
-        .avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--accent); display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 20px; }
-        .follow-btn { padding: 10px 25px; border-radius: 14px; background: white; color: black; font-weight: 800; border: none; cursor: pointer; }
-
-        .description-box {
-            background: var(--card); padding: 20px; border-radius: 20px;
-            font-size: 14px; line-height: 1.6; color: #cbd5e1;
+            background: var(--card); padding: 15px; border-radius: 20px; margin-bottom: 25px;
         }
 
-        /* --- RELATED CONTENT --- */
-        .related-title { font-size: 18px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .related-list { display: flex; flex-direction: column; gap: 15px; }
+        .creator-info { display: flex; align-items: center; gap: 12px; }
+        .creator-avatar { width: 45px; height: 45px; border-radius: 50%; background: #000; color: white; display: flex; justify-content: center; align-items: center; font-weight: 800; }
+        
+        .creator-name h4 { font-size: 15px; font-weight: 800; }
+        .creator-name p { font-size: 12px; color: #64748b; font-weight: 600; }
 
-        .related-card {
-            display: flex; gap: 12px; cursor: pointer; transition: var(--transition);
+        .follow-btn {
+            background: var(--primary); color: white; padding: 10px 20px;
+            border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer;
         }
-        .related-card:hover { opacity: 0.8; }
-        .thumb-mini { width: 140px; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; flex-shrink: 0; }
-        .thumb-mini img { width: 100%; height: 100%; object-fit: cover; }
-        .related-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .related-info p { font-size: 12px; color: #94a3b8; }
 
-        /* Ad Placement */
-        .cinema-ad {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center;
+        /* --- DESCRIPTION --- */
+        .desc-box { background: var(--card); padding: 15px; border-radius: 15px; font-size: 14px; line-height: 1.6; color: #475569; margin-bottom: 25px; }
+
+        /* --- AD PLACEMENT --- */
+        .ad-banner {
+            width: 100%; padding: 20px; border-radius: 20px; background: #1e293b;
+            color: white; text-align: center; margin-bottom: 30px;
         }
+
+        /* --- RELATED CONTENT GRID --- */
+        .related-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; }
+        
+        .related-list { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 768px) { .related-list { grid-template-columns: 1fr 1fr; } }
+
+        .related-card { display: flex; gap: 12px; cursor: pointer; }
+        .rel-thumb { width: 140px; aspect-ratio: 16/9; background: #e2e8f0; border-radius: 12px; overflow: hidden; flex-shrink: 0; }
+        .rel-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .rel-info h5 { font-size: 14px; font-weight: 700; line-height: 1.3; margin-bottom: 4px; }
+        .rel-info p { font-size: 11px; color: #64748b; font-weight: 600; }
+
     </style>
 </head>
 <body>
 
     <div id="loaderContainer"></div>
 
-    <!-- Player -->
-    <section class="player-section" id="playerArea">
-        <video id="mainVideo" playsinline poster="">
-            <source src="" type="video/mp4">
-        </video>
+    <nav class="player-nav">
+        <button class="back-btn" onclick="history.back()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <span style="font-weight: 800;">Nexy Hub Cinema</span>
+    </nav>
 
-        <!-- Luxury Controls -->
-        <div class="player-controls">
-            <div class="progress-bar" id="progressContainer">
-                <div class="progress-fill" id="progressFill"></div>
+    <div class="theater-wrapper">
+        <video id="mainVideo" controls autoplay playsinline></video>
+    </div>
+
+    <main class="info-container">
+        <h1 class="video-title" id="vTitle">Loading Elite Content...</h1>
+        <div class="stats-row" id="vStats">0 views • Jun 23, 2024</div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="action-pill" onclick="handleLike()">
+                <svg viewBox="0 0 24 24" id="likeIcon"><path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.46 20.04L12 21.35Z"/></svg>
+                <span id="likeCount">Elite Like</span>
             </div>
-            <div class="control-btns">
-                <div class="btns-left">
-                    <svg id="playPauseBtn" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-                </div>
-                <div class="btns-right">
-                    <svg id="fullscreenBtn" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                </div>
+            <div class="action-pill" onclick="handleShare()">
+                <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                <span>Elite Share</span>
             </div>
-        </div>
-    </section>
-
-    <!-- Main Grid -->
-    <main class="main-layout">
-        <!-- Video Content -->
-        <div class="video-content">
-            <div class="video-details">
-                <h1 id="videoTitle">Loading Elite Content...</h1>
-                <div class="stats-bar">
-                    <span class="views-count" id="videoStats">0 views • Joined Nexy Hub</span>
-                    <div class="interaction-btns">
-                        <button class="action-btn" id="likeBtn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></button>
-                            <span id="likeCount">0</span>
-                        </button>
-                        <button class="action-btn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
-                            Share
-                        </button>
-                    </div>
-                </div>
-
-                <div class="uploader-box">
-                    <div class="profile-info">
-                        <div class="avatar" id="uploaderAvatar">U</div>
-                        <div>
-                            <h4 id="uploaderName" style="font-weight: 800;">Elite Creator</h4>
-                            <p style="font-size: 12px; color: #94a3b8;">Verified Member</p>
-                        </div>
-                    </div>
-                    <button class="follow-btn">Elite Plus</button>
-                </div>
-
-                <div class="description-box" id="videoDesc">
-                    Select a video to experience the full Nexy Hub cinema. Premium user-generated content awaits you.
-                </div>
+            <div class="action-pill">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                <span>Save</span>
             </div>
         </div>
 
-        <!-- Sidebar (Related) -->
-        <aside class="sidebar">
-            <div class="cinema-ad">
-                <h3 style="font-size: 16px; font-weight: 800;">Unlock Nexy 4K</h3>
-                <p style="font-size: 12px; margin-top: 5px;">Stream without interruptions.</p>
+        <!-- Creator -->
+        <div class="creator-card">
+            <div class="creator-info">
+                <div class="creator-avatar" id="cAvatar">U</div>
+                <div class="creator-name">
+                    <h4 id="cName">Elite Creator</h4>
+                    <p>Verified Elite Member</p>
+                </div>
             </div>
+            <button class="follow-btn">Elite Follow</button>
+        </div>
 
-            <div class="related-title">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
-                Watch Next
-            </div>
+        <!-- Description -->
+        <div class="desc-box" id="vDesc">
+            Premium luxury description loading... Experience Nexy Hub.
+        </div>
 
-            <div class="related-list" id="relatedList">
-                <!-- Related videos go here -->
-            </div>
-        </aside>
+        <!-- Ad -->
+        <div class="ad-banner">
+            <h3 style="font-weight: 800; font-size: 16px;">Nexy Premium Access</h3>
+            <p style="font-size: 12px; opacity: 0.8; margin-top: 5px;">Ad-free cinema & offline elite viewing.</p>
+        </div>
+
+        <!-- Related Feed -->
+        <h3 class="related-title">Next Elite Content</h3>
+        <div class="related-list" id="relatedList">
+            <!-- Related items injected here -->
+        </div>
+
     </main>
 
     <script type="module">
@@ -226,105 +180,90 @@
         import { doc, getDoc, collection, query, limit, getDocs, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { auth, db } from "./imp/firebase-config.js";
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const videoId = urlParams.get('id');
+        // 1. Get Video ID from URL
+        const params = new URLSearchParams(window.location.search);
+        const videoId = params.get('v');
 
-        // 1. Auth & Load Video
+        if (!videoId) window.location.replace('home.html');
+
         onAuthStateChanged(auth, (user) => {
-            if (!user) window.location.replace("login.html");
-            else if (videoId) loadVideoDetails(videoId);
-            else window.location.replace("home.html");
+            if (!user) window.location.replace('login.html');
+            else {
+                loadVideoData();
+                loadRelatedVideos();
+            }
         });
 
-        async function loadVideoDetails(id) {
-            const videoSnap = await getDoc(doc(db, "videos", id));
-            if (videoSnap.exists()) {
-                const data = videoSnap.data();
-                
-                // Update UI
-                document.getElementById('mainVideo').src = data.videoURL;
-                document.getElementById('videoTitle').innerText = data.title;
-                document.getElementById('uploaderName').innerText = data.username;
-                document.getElementById('uploaderAvatar').innerText = data.username.charAt(0);
-                document.getElementById('videoStats').innerText = `${data.views || 0} views • Elite Member`;
-                document.getElementById('likeCount').innerText = data.likes || 0;
-                document.getElementById('videoDesc').innerText = data.description || "No elite description provided.";
+        // 2. Fetch Specific Video
+        async function loadVideoData() {
+            try {
+                const snap = await getDoc(doc(db, "videos", videoId));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    
+                    // UI Update
+                    document.getElementById('mainVideo').src = data.videoURL;
+                    document.getElementById('vTitle').innerText = data.title;
+                    document.getElementById('vDesc').innerText = data.title + " - Luxury content exclusively on Nexy Hub.";
+                    document.getElementById('vStats').innerText = `${data.views || 0} elite views • Jun 2024`;
+                    document.getElementById('cName').innerText = data.username || "Elite Member";
+                    document.getElementById('cAvatar').innerText = (data.username || "U").charAt(0).toUpperCase();
+                    document.getElementById('likeCount').innerText = `${data.likes || 0} Elite Likes`;
 
-                // Increment View
-                updateDoc(doc(db, "videos", id), { views: increment(1) });
-                
-                fetchRelated();
-            }
+                    // Increment View Count
+                    updateDoc(doc(db, "videos", videoId), { views: increment(1) });
+                }
+            } catch (e) { console.error(e); }
         }
 
-        // 2. Custom Player Controls
-        const video = document.getElementById('mainVideo');
-        const playBtn = document.getElementById('playPauseBtn');
-        const progress = document.getElementById('progressFill');
+        // 3. Fetch Related Feed
+        async function loadRelatedVideos() {
+            const list = document.getElementById('relatedList');
+            try {
+                const q = query(collection(db, "videos"), limit(10));
+                const snap = await getDocs(q);
+                
+                snap.forEach(doc => {
+                    if (doc.id === videoId) return; // Skip current
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'related-card';
+                    card.onclick = () => window.location.href = `video-player.html?v=${doc.id}`;
+                    
+                    card.innerHTML = `
+                        <div class="rel-thumb"><img src="${data.thumbnail || ''}"></div>
+                        <div class="rel-info">
+                            <h5>${data.title}</h5>
+                            <p>${data.username || 'Elite Creator'}</p>
+                            <p>${data.views || 0} views</p>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            } catch (e) { console.error(e); }
+        }
 
-        playBtn.onclick = () => {
-            if (video.paused) {
-                video.play();
-                playBtn.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        window.handleLike = async () => {
+            document.getElementById('likeIcon').style.fill = "#6366f1";
+            // In production: updateDoc(doc(db, "videos", videoId), { likes: increment(1) });
+        };
+
+        window.handleShare = () => {
+            if (navigator.share) {
+                navigator.share({ title: 'Nexy Hub Elite', url: window.location.href });
             } else {
-                video.pause();
-                playBtn.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                navigator.clipboard.writeText(window.location.href);
+                alert("Elite link copied!");
             }
-        };
-
-        video.ontimeupdate = () => {
-            const perc = (video.currentTime / video.duration) * 100;
-            progress.style.width = perc + '%';
-        };
-
-        // 3. Swipe Up/Down Navigation (Mobile)
-        let touchStart = 0;
-        document.getElementById('playerArea').addEventListener('touchstart', e => {
-            touchStart = e.touches[0].clientY;
-        });
-
-        document.getElementById('playerArea').addEventListener('touchend', e => {
-            const touchEnd = e.changedTouches[0].clientY;
-            if (touchStart - touchEnd > 100) {
-                // Swipe Up -> Next Video Logic
-                window.location.reload(); 
-            }
-        });
-
-        // 4. Fetch Related Content
-        async function fetchRelated() {
-            const relatedList = document.getElementById('relatedList');
-            const q = query(collection(db, "videos"), limit(10));
-            const snap = await getDocs(q);
-
-            snap.forEach(doc => {
-                if (doc.id === videoId) return;
-                const d = doc.data();
-                const card = document.createElement('div');
-                card.className = 'related-card';
-                card.onclick = () => window.location.href = `video-play.html?id=${doc.id}`;
-                card.innerHTML = `
-                    <div class="thumb-mini"><img src="${d.thumbnail || ''}"></div>
-                    <div class="related-info">
-                        <h4>${d.title}</h4>
-                        <p>${d.username} • ${d.views || 0} views</p>
-                    </div>
-                `;
-                relatedList.appendChild(card);
-            });
-        }
-
-        // Like Toggle
-        document.getElementById('likeBtn').onclick = function() {
-            this.classList.toggle('liked');
-            // Update Firestore logic here
         };
 
         // Inject Loader
-        fetch('./imp/loader.html').then(r => r.text()).then(h => {
-            document.getElementById('loaderContainer').innerHTML = h;
-            eval(document.getElementById('loaderContainer').getElementsByTagName('script')[0].innerText);
+        fetch('./imp/loader.html').then(r => r.text()).then(html => {
+            document.getElementById('loaderContainer').innerHTML = html;
+            const scripts = document.getElementById('loaderContainer').getElementsByTagName('script');
+            for (let s of scripts) eval(s.innerText);
         });
+
     </script>
 </body>
 </html>
