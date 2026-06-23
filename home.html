@@ -11,12 +11,12 @@
         :root {
             --primary: #000000;
             --accent: #6366f1;
-            --bg: #f8fafc;
+            --bg: #fdfdfe;
             --card: #ffffff;
-            --glass: rgba(255, 255, 255, 0.9);
-            --border: #f1f5f9;
-            --shadow: 0 20px 40px rgba(0,0,0,0.04);
-            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --glass: rgba(255, 255, 255, 0.8);
+            --border: rgba(241, 245, 249, 0.8);
+            --shadow: 0 30px 60px -12px rgba(0,0,0,0.06);
+            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -28,119 +28,96 @@
             overflow-x: hidden;
         }
 
-        /* --- LUXURY HEADER --- */
+        /* --- LUXURY STICKY HEADER --- */
         .top-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 75px;
             background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; z-index: 1000; border-bottom: 1px solid var(--border);
+            padding: 0 25px; z-index: 1000; border-bottom: 1.5px solid var(--border);
         }
 
-        .logo-box { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; cursor: pointer; color: var(--primary); }
+        .logo-box { font-weight: 900; font-size: 24px; letter-spacing: -1.5px; cursor: pointer; }
 
-        .search-box {
-            flex: 1; max-width: 500px; position: relative; margin: 0 20px;
-        }
-
+        .search-box { flex: 1; max-width: 550px; position: relative; margin: 0 30px; }
         .search-box input {
-            width: 100%; padding: 12px 20px 12px 45px; border-radius: 18px;
+            width: 100%; padding: 14px 20px 14px 50px; border-radius: 18px;
             border: 1.5px solid var(--border); background: #f1f5f9;
             font-size: 14px; font-weight: 600; outline: none; transition: var(--transition);
         }
         .search-box input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 5px rgba(0,0,0,0.02); }
-        .search-box svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); fill: #94a3b8; width: 18px; }
-
-        /* --- CATEGORY CHIPS --- */
-        .category-bar {
-            display: flex; gap: 12px; padding: 15px 20px; overflow-x: auto;
-            background: white; border-bottom: 1px solid var(--border);
-            margin-top: 70px; scrollbar-width: none; position: sticky; top: 70px; z-index: 999;
-        }
-        .category-bar::-webkit-scrollbar { display: none; }
-
-        .chip {
-            padding: 10px 24px; border-radius: 15px; background: #f1f5f9;
-            font-size: 13px; font-weight: 800; white-space: nowrap; cursor: pointer;
-            transition: var(--transition); border: 1.5px solid transparent;
-        }
-        .chip.active { background: var(--primary); color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .search-box svg { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); fill: #94a3b8; width: 20px; }
 
         /* --- MAIN LAYOUT --- */
         .main-content {
-            padding: 25px; padding-bottom: 120px;
+            padding: 100px 24px 120px;
             max-width: 1400px; margin: 0 auto;
         }
 
         @media (min-width: 768px) { body { padding-left: 80px; } }
 
-        /* --- FEED GRID (1 Mobile, 2 Tablet, 3 Desktop) --- */
-        .feed-grid {
-            display: grid; grid-template-columns: 1fr; gap: 30px;
-        }
+        /* --- FEED GRID (Luxury 4K Look) --- */
+        .feed-grid { display: grid; grid-template-columns: 1fr; gap: 35px; }
         @media (min-width: 768px) { .feed-grid { grid-template-columns: 1fr 1fr; } }
-        @media (min-width: 1100px) { .feed-grid { grid-template-columns: 1fr 1fr 1fr; } }
+        @media (min-width: 1200px) { .feed-grid { grid-template-columns: 1fr 1fr 1fr; } }
 
-        /* --- LUXURY CARD --- */
+        /* --- PREMIUM CARD UI --- */
         .card {
             background: var(--card); border-radius: 35px; overflow: hidden;
-            box-shadow: var(--shadow); border: 1px solid white; transition: var(--transition);
-            cursor: pointer; position: relative; animation: slideUp 0.6s ease-out forwards;
+            box-shadow: var(--shadow); border: 1.5px solid #ffffff; transition: var(--transition);
+            cursor: pointer; position: relative;
         }
-        @keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
 
-        .card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+        .card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
 
-        .thumb-wrap {
+        .thumb-area {
             width: 100%; aspect-ratio: 16/9; background: #000;
             position: relative; overflow: hidden;
         }
 
-        /* Actual Generated Thumbnail Image */
-        .thumb-img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.8s ease;
-        }
-        .card:hover .thumb-img { transform: scale(1.05); }
+        /* Thumbnail Image display */
+        .thumb-area img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+        .card:hover .thumb-area img { transform: scale(1.1); }
 
         .play-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, transparent 50%);
-            display: flex; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: 0.3s;
+        }
+        .card:hover .play-overlay { opacity: 1; background: rgba(0,0,0,0.3); }
+        .play-btn-icon { width: 60px; height: 60px; background: rgba(255,255,255,0.25); backdrop-filter: blur(15px); border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+
+        .tag-row { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
+        .glass-tag {
+            padding: 7px 14px; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+            border-radius: 14px; font-size: 11px; font-weight: 800; text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        .play-btn-icon {
-            width: 50px; height: 50px; background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px); border-radius: 50%; display: flex;
-            justify-content: center; align-items: center; opacity: 0; transform: scale(0.8);
-            transition: var(--transition);
-        }
-        .card:hover .play-btn-icon { opacity: 1; transform: scale(1); }
-
-        .badge {
-            position: absolute; top: 15px; left: 15px; padding: 6px 14px;
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
-            border-radius: 12px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        .duration-tag {
+            position: absolute; bottom: 15px; right: 20px; padding: 5px 10px;
+            background: rgba(0,0,0,0.7); color: #fff; border-radius: 9px; font-size: 11px; font-weight: 700;
         }
 
-        .card-footer { padding: 20px; display: flex; gap: 15px; align-items: flex-start; }
-
-        .user-avatar {
+        .card-footer { padding: 22px; display: flex; gap: 18px; }
+        .u-avatar {
             width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            display: flex; justify-content: center; align-items: center; font-weight: 800;
-            border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); flex-shrink: 0;
+            display: flex; justify-content: center; align-items: center; font-weight: 800; color: #1e293b;
+            flex-shrink: 0; border: 2.5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .info-text h3 { font-size: 17px; font-weight: 800; line-height: 1.3; margin-bottom: 6px; 
-                       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .info-text p { font-size: 13px; color: #64748b; font-weight: 600; }
+        .v-meta h3 { font-size: 17px; font-weight: 800; line-height: 1.4; color: #0f172a; margin-bottom: 6px; 
+                   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .v-meta p { font-size: 13px; color: #64748b; font-weight: 600; }
 
-        /* Skeletons */
-        .skeleton { background: #e2e8f0; border-radius: 35px; height: 300px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        /* --- SKELETON LOADERS --- */
+        .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 30px; height: 320px; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        .no-results { grid-column: 1/-1; text-align: center; padding: 100px 20px; }
-        .no-results h2 { font-weight: 800; color: #94a3b8; }
+        /* Ad Placement */
+        .premium-ad { grid-column: 1/-1; background: #000; border-radius: 35px; padding: 40px; color: #fff; text-align: center; position: relative; overflow: hidden; margin: 15px 0; }
+        .premium-ad h2 { font-size: 24px; font-weight: 900; margin-bottom: 10px; }
+        .ad-btn { display: inline-block; padding: 12px 30px; background: #fff; color: #000; border-radius: 15px; font-weight: 800; text-decoration: none; margin-top: 15px; }
+
     </style>
 </head>
 <body>
@@ -149,27 +126,19 @@
     <div id="loaderContainer"></div>
 
     <header class="top-header">
-        <div class="logo-box" onclick="location.reload()">NEXY HUB</div>
+        <div class="logo-box">NEXY HUB</div>
         
         <div class="search-box">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            <input type="text" id="searchInput" placeholder="Search premium content...">
+            <input type="text" id="searchInput" placeholder="Search elite content...">
         </div>
 
         <div style="width: 48px; height: 48px; background: #e2e8f0; border-radius: 50%; cursor: pointer; border: 3px solid white; box-shadow: var(--shadow);" onclick="window.location.href='profile.html'"></div>
     </header>
 
-    <div class="category-bar">
-        <div class="chip active" data-cat="all">All Elite</div>
-        <div class="chip" data-cat="luxury">Luxury</div>
-        <div class="chip" data-cat="action">Action</div>
-        <div class="chip" data-cat="trends">Trending</div>
-        <div class="chip" data-cat="gaming">Gaming</div>
-    </div>
-
     <main class="main-content">
         <div class="feed-grid" id="videoGrid">
-            <!-- Skeletons load first -->
+            <!-- Loading Skeletons -->
             <div class="skeleton"></div>
             <div class="skeleton"></div>
             <div class="skeleton"></div>
@@ -178,108 +147,94 @@
 
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, query, orderBy, limit, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { auth, db } from "./imp/firebase-config.js";
 
-        let currentCategory = "all";
-
-        // 1. Check Auth & Load
+        // 1. Check Login
         onAuthStateChanged(auth, (user) => {
             if (!user) window.location.replace("login.html");
-            else fetchFeed();
+            else fetchEliteContent();
         });
 
-        // 2. Fetch Logic (A to Z)
-        async function fetchFeed() {
+        // 2. Fetch Firestore Content
+        async function fetchEliteContent() {
             const grid = document.getElementById('videoGrid');
-            grid.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
-
             try {
-                let q;
-                const vRef = collection(db, "videos");
-
-                if (currentCategory === "all") {
-                    q = query(vRef, orderBy("createdAt", "desc"), limit(15));
-                } else {
-                    q = query(vRef, where("category", "==", currentCategory), orderBy("createdAt", "desc"), limit(15));
-                }
-
+                const q = query(collection(db, "videos"), orderBy("createdAt", "desc"), limit(12));
                 const snap = await getDocs(q);
-                grid.innerHTML = '';
+                
+                grid.innerHTML = ''; // Clear skeletons
 
                 if (snap.empty) {
-                    grid.innerHTML = `<div class="no-results"><h2>No Elite Content Found.</h2><p>Be the first to upload in this category.</p></div>`;
+                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:100px; font-weight:800; opacity:0.4;">NO ELITE CONTENT FOUND</div>';
                     return;
                 }
 
+                // Add Ad Banner after 3 cards
+                let count = 0;
                 snap.forEach(doc => {
+                    count++;
                     const data = doc.data();
                     grid.appendChild(createLuxuryCard(data, doc.id));
+                    
+                    if (count === 3) {
+                        grid.appendChild(createAdBanner());
+                    }
                 });
 
-            } catch (err) {
-                console.error("Firestore Fetch Error:", err);
-                grid.innerHTML = `<div class="no-results"><h2>Connection Delay.</h2><p>Syncing with elite database...</p></div>`;
+            } catch (e) {
+                console.error("Critical Sync Error:", e);
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:red;">Elite Sync Error. Refresh.</div>';
             }
         }
 
-        // 3. UI Luxury Card Component
+        // 3. Luxury Card Component
         function createLuxuryCard(data, id) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.onclick = () => window.location.href = `video-player.html?v=${id}`;
+            const el = document.createElement('div');
+            el.className = 'card';
+            el.onclick = () => window.location.href = `video-player.html?v=${id}`;
 
-            // Gender Icon logic
-            let gIcon = "🌍";
-            if (data.target === 'male') gIcon = "👨";
-            if (data.target === 'female') gIcon = "👩";
-            if (data.target === 'kids') gIcon = "👶";
+            // Handle Broken Video Links with Thumbnail Fallback
+            // If upload.html saved a base64 thumbnail, we show that image
+            const thumbSrc = data.thumbnail || "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=1000&auto=format&fit=crop";
 
-            // Thumbnail Logic:
-            // اگر ڈیٹا بیس میں 'thumbnail' موجود ہے (Base64) تو اسے دکھائیں، ورنہ ویڈیو فریم۔
-            const thumbSrc = data.thumbnail ? data.thumbnail : `${data.videoURL}#t=0.5`;
-
-            card.innerHTML = `
-                <div class="thumb-wrap">
-                    <img src="${thumbSrc}" class="thumb-img" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop'">
+            el.innerHTML = `
+                <div class="thumb-area">
+                    <img src="${thumbSrc}" loading="lazy">
                     <div class="play-overlay">
                         <div class="play-btn-icon">
-                            <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         </div>
                     </div>
-                    <div class="badge">${gIcon} <span>${(data.target || 'Elite').toUpperCase()}</span></div>
+                    <div class="tag-row">
+                        <div class="glass-tag">Elite</div>
+                        <div class="glass-tag" style="background:var(--accent); color:#fff;">${data.category || 'Luxury'}</div>
+                    </div>
+                    <div class="duration-tag">4K Premium</div>
                 </div>
                 <div class="card-footer">
-                    <div class="user-avatar">${(data.username || 'U').charAt(0).toUpperCase()}</div>
-                    <div class="info-text">
-                        <h3>${data.title || 'Untitled Luxury Experience'}</h3>
-                        <p>${data.username || 'Elite Member'} • ${data.views || 0} elite views</p>
+                    <div class="u-avatar">${(data.username || 'U').charAt(0).toUpperCase()}</div>
+                    <div class="v-meta">
+                        <h3>${data.title || 'Untitled Elite Experience'}</h3>
+                        <p>${data.username || 'Elite Member'} • ${data.views || 0} views</p>
                     </div>
                 </div>
             `;
-            return card;
+            return el;
         }
 
-        // 4. Category Filter Logic
-        document.querySelectorAll('.chip').forEach(chip => {
-            chip.onclick = () => {
-                document.querySelector('.chip.active').classList.remove('active');
-                chip.classList.add('active');
-                currentCategory = chip.dataset.cat;
-                fetchFeed();
-            };
-        });
+        function createAdBanner() {
+            const ad = document.createElement('div');
+            ad.className = 'premium-ad';
+            ad.innerHTML = `
+                <h2>NEXY HUB PREMIUM</h2>
+                <p style="opacity:0.7; font-weight:600;">Remove all ads and unlock 8K Elite Streaming.</p>
+                <a href="#" class="ad-btn">Upgrade Now</a>
+            `;
+            return ad;
+        }
 
-        // 5. Local Search
-        document.getElementById('searchInput').oninput = (e) => {
-            const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.card').forEach(card => {
-                const text = card.innerText.toLowerCase();
-                card.style.display = text.includes(term) ? 'block' : 'none';
-            });
-        };
-
-        // Inject Components
+        // Injection
         const inject = (url, target) => {
             fetch(url).then(r => r.text()).then(html => {
                 document.getElementById(target).innerHTML = html;
