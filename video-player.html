@@ -3,51 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexy Cinema - Luxury Experience</title>
+    <title>Elite Cinema - Nexy Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #000; --bg: #ffffff; --card: #f1f5f9; --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); overflow-x: hidden; }
-        .player-nav { position: sticky; top: 0; width: 100%; height: 60px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); display: flex; align-items: center; padding: 0 20px; z-index: 1000; border-bottom: 1px solid #e2e8f0; }
-        .video-stage { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; justify-content: center; align-items: center; position: relative; }
-        #mainVideo { width: 100%; height: 100%; }
-        .content-info { padding: 20px; max-width: 800px; margin: 0 auto; }
-        .v-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-        .v-stats { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 20px; }
-        .creator-bar { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; margin-bottom: 20px; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; background: #000; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: 800; }
-        .desc-box { background: #f8fafc; padding: 20px; border-radius: 20px; font-size: 14px; line-height: 1.6; color: #334155; }
-        #errorMsg { position: absolute; color: white; display: none; font-weight: 700; text-align: center; }
+        :root { --primary: #000; --bg: #ffffff; --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #0f172a; }
+        
+        .player-nav { position: sticky; top: 0; width: 100%; height: 65px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); display: flex; align-items: center; padding: 0 20px; z-index: 1000; border-bottom: 1px solid #e2e8f0; }
+        .back-btn { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        
+        .video-container { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        video { width: 100%; height: 100%; object-fit: contain; }
+        
+        .content-card { padding: 25px 20px; max-width: 900px; margin: 0 auto; }
+        .v-title { font-size: 24px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; }
+        .v-meta { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 25px; }
+        
+        .creator-strip { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: #f8fafc; border-radius: 20px; border: 1px solid #f1f5f9; margin-bottom: 25px; }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: #000; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: 800; }
+        
+        .desc-box { padding: 20px; background: #f1f5f9; border-radius: 20px; font-size: 14px; line-height: 1.6; color: #475569; }
+        
+        #errorOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; flex-direction: column; justify-content: center; align-items: center; color: #fff; text-align: center; padding: 20px; }
+        .btn-retry { margin-top: 15px; padding: 10px 25px; background: #fff; color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
+
     <nav class="player-nav">
-        <button onclick="history.back()" style="background:none; border:none; font-weight:800; cursor:pointer;">← Back</button>
-        <span style="margin-left: 15px; font-weight: 900; letter-spacing: -0.5px;">NEXY CINEMA</span>
+        <div class="back-btn" onclick="history.back()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </div>
+        <span style="font-weight: 900; margin-left: 15px;">NEXY CINEMA</span>
     </nav>
 
-    <div class="video-stage">
-        <video id="mainVideo" controls autoplay playsinline controlsList="nodownload"></video>
-        <div id="errorMsg">Video Link Expired or Private</div>
+    <div class="video-container">
+        <!-- ویڈیو ٹیگ میں crossorigin اور بہتری -->
+        <video id="mainVideo" controls autoplay playsinline controlsList="nodownload" preload="auto"></video>
+        
+        <div id="errorOverlay">
+            <svg width="40" height="40" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <h3 style="margin-top:15px;">Elite Sync Issue</h3>
+            <p style="font-size:13px; opacity:0.8;">The video link is temporarily unavailable.</p>
+            <button class="btn-retry" onclick="location.reload()">Retry Sync</button>
+        </div>
     </div>
 
-    <main class="content-info">
-        <h1 class="v-title" id="vTitle">Loading...</h1>
-        <p class="v-stats" id="vStats">0 views • Processing</p>
+    <main class="content-card">
+        <h1 class="v-title" id="vTitle">Syncing Title...</h1>
+        <div class="v-meta" id="vMeta">0 Views • Elite Quality</div>
 
-        <div class="creator-bar">
+        <div class="creator-strip">
             <div style="display:flex; align-items:center; gap:12px;">
-                <div class="avatar" id="cAvatar">U</div>
+                <div class="avatar" id="cAvatar">?</div>
                 <div>
-                    <h4 id="cName" style="font-size:15px; font-weight:800;">Elite Member</h4>
-                    <p style="font-size:12px; color:#64748b;">Verified</p>
+                    <h4 id="cName" style="font-size:16px; font-weight:800;">Elite Member</h4>
+                    <p style="font-size:12px; color:#64748b;">Verified Hub Creator</p>
                 </div>
             </div>
-            <button style="background:#000; color:#fff; border:none; padding:10px 20px; border-radius:12px; font-weight:800; cursor:pointer;">Follow</button>
+            <button style="background:#000; color:#fff; border:none; padding:12px 25px; border-radius:15px; font-weight:800; cursor:pointer;">Follow</button>
         </div>
 
-        <div class="desc-box" id="vDesc">...</div>
+        <div class="desc-box" id="vDesc">Loading elite description...</div>
     </main>
 
     <script type="module">
@@ -57,33 +75,42 @@
         const params = new URLSearchParams(window.location.search);
         const videoId = params.get('v');
         const mainVid = document.getElementById('mainVideo');
+        const errorUI = document.getElementById('errorOverlay');
 
         if (!videoId) window.location.href = 'home.html';
 
-        async function loadVideo() {
+        async function initPlayer() {
             try {
                 const snap = await getDoc(doc(db, "videos", videoId));
                 if (snap.exists()) {
                     const data = snap.data();
+                    
+                    // ویڈیو لنک سیٹ کریں
                     mainVid.src = data.videoURL;
+                    
                     document.getElementById('vTitle').innerText = data.title;
-                    document.getElementById('vDesc').innerText = data.description || "Premium elite content.";
-                    document.getElementById('vStats').innerText = `${data.views || 0} views • Elite Live`;
+                    document.getElementById('vDesc').innerText = data.description || "No elite description provided.";
+                    document.getElementById('vMeta').innerText = `${data.views || 0} Views • Published on Nexy Hub`;
                     document.getElementById('cName').innerText = data.username;
                     document.getElementById('cAvatar').innerText = data.username.charAt(0).toUpperCase();
 
-                    // Error handling if video link fails
+                    // اگر ویڈیو لوڈ نہ ہو سکے تو ایرر دکھائیں
                     mainVid.onerror = () => {
-                        mainVid.style.display = 'none';
-                        document.getElementById('errorMsg').style.display = 'block';
+                        errorUI.style.display = 'flex';
                     };
 
-                    // Views increment
+                    // ویوز بڑھائیں
                     updateDoc(doc(db, "videos", videoId), { views: increment(1) });
+                } else {
+                    window.location.href = 'home.html';
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error("Player Sync Error:", e);
+                errorUI.style.display = 'flex';
+            }
         }
-        loadVideo();
+
+        initPlayer();
     </script>
 </body>
 </html>
