@@ -3,552 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Upload - Nexy Fans</title>
-    <meta name="theme-color" content="#ffffff">
+    <title>Elite Studio - Nexy Hub</title>
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Premium Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --primary: #000000;
+            --accent: #d4af37; /* Luxury Gold */
+            --bg: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.8);
+            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            color: #1a1a1a;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: #0f172a;
             overflow-x: hidden;
         }
 
-        /* Top Header */
-        .top-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            z-index: 900;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            font-weight: 600;
-            font-size: 16px;
+        /* --- LUXURY HEADER --- */
+        .studio-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+            background: var(--glass); backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Main Layout */
-        .main-layout {
-            padding-top: 80px;
-            padding-bottom: 100px; /* Space for nav dock */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .header-content { width: 100%; max-width: 500px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+        .back-btn { background: none; border: none; cursor: pointer; }
+        .header-title { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+
+        /* --- MAIN LAYOUT --- */
+        .main-layout { padding: 90px 20px 120px; max-width: 550px; margin: 0 auto; }
+
+        @media (min-width: 768px) { body { padding-left: 80px; } }
+
+        /* --- CREATOR IDENTITY CARD --- */
+        .creator-identity {
+            background: var(--primary); color: white; padding: 20px;
+            border-radius: 24px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 0.8s ease-out;
         }
 
-        @media (min-width: 768px) {
-            .top-header {
-                padding-left: 80px; /* Offset for desktop sidebar */
-            }
-            .main-layout {
-                padding-left: 80px; /* Offset for desktop sidebar */
-            }
+        .creator-avatar {
+            width: 50px; height: 50px; background: var(--accent); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-weight: 800; color: black;
         }
 
-        .upload-container {
-            width: 100%;
-            max-width: 480px;
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            margin: 0 16px;
+        .creator-details h4 { font-size: 14px; opacity: 0.7; font-weight: 500; }
+        .creator-details h3 { font-size: 18px; font-weight: 800; }
+
+        /* --- UPLOAD FORM --- */
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(20px);
+            border: 1px solid white; border-radius: 30px; padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* Drag & Drop Zone */
-        .drop-zone {
-            width: 100%;
-            border: 2px dashed #cbd5e1;
-            border-radius: 16px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: #f8fafc;
-            position: relative;
-            overflow: hidden;
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; margin-left: 5px; }
+
+        input, select, textarea {
+            width: 100%; padding: 16px; border-radius: 18px; border: 1.5px solid #e2e8f0;
+            background: white; font-size: 15px; font-weight: 600; outline: none; transition: var(--transition);
         }
 
-        .drop-zone.dragover {
-            border-color: #1a1a1a;
-            background: #f1f5f9;
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1); }
+
+        textarea { height: 100px; resize: none; }
+
+        .row { display: flex; gap: 12px; }
+        .row .form-group { flex: 1; }
+
+        /* --- PUBLISH BUTTON --- */
+        .btn-publish {
+            width: 100%; padding: 20px; border-radius: 20px; background: var(--primary);
+            color: white; border: none; font-size: 16px; font-weight: 800;
+            cursor: pointer; transition: var(--transition); margin-top: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
         }
 
-        .drop-zone svg {
-            width: 48px;
-            height: 48px;
-            fill: #64748b;
-            margin-bottom: 12px;
-            transition: fill 0.2s;
+        .btn-publish:active { transform: scale(0.96); opacity: 0.9; }
+        .btn-publish svg { fill: var(--accent); }
+
+        /* --- SUCCESS MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(15px);
+            display: none; justify-content: center; align-items: center; z-index: 2000; padding: 24px;
         }
 
-        .drop-zone.dragover svg {
-            fill: #1a1a1a;
+        .modal {
+            background: white; padding: 40px 30px; border-radius: 35px; width: 100%; max-width: 380px;
+            text-align: center; animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .drop-zone h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
+        .modal-icon { width: 80px; height: 80px; background: #f0fdf4; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; }
+        .modal-icon svg { width: 40px; height: 40px; fill: #22c55e; }
 
-        .drop-zone p {
-            font-size: 13px;
-            color: #64748b;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        #fileInput {
-            display: none;
-        }
-
-        /* Video Preview */
-        .preview-container {
-            display: none;
-            width: 100%;
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #000;
-            aspect-ratio: 4/5;
-        }
-
-        .preview-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .remove-video {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            border: none;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .remove-video svg {
-            width: 16px;
-            height: 16px;
-            fill: white;
-        }
-
-        /* Form Details */
-        .form-group {
-            margin-top: 24px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: #475569;
-            margin-bottom: 8px;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            border: 1.5px solid #e2e8f0;
-            background: #ffffff;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            color: #1a1a1a;
-            transition: all 0.2s ease;
-            outline: none;
-            resize: none;
-            height: 100px;
-        }
-
-        textarea:focus {
-            border-color: #1a1a1a;
-            box-shadow: 0 0 0 4px rgba(26, 26, 26, 0.05);
-        }
-
-        /* Progress Bar */
-        .progress-wrapper {
-            display: none;
-            margin-top: 24px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #475569;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #1a1a1a, #4a4a4a);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        /* Buttons */
-        .btn-primary {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            background: #1a1a1a;
-            color: #ffffff;
-            margin-top: 24px;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-            display: none;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Error/Success Messages */
-        .msg-box {
-            font-size: 13px;
-            margin-top: 16px;
-            text-align: center;
-            display: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-
-        .error-msg { color: #ef4444; background: #fef2f2; }
-        .success-msg { color: #059669; background: #ecfdf5; }
+        .spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Dock Container -->
     <div id="navDockContainer"></div>
+    <div id="loaderContainer"></div>
 
-    <!-- Header -->
-    <header class="top-header">
-        Upload Video
+    <header class="studio-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="history.back()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <span class="header-title">Elite Studio</span>
+            <div style="width: 24px;"></div>
+        </div>
     </header>
 
-    <!-- Main Layout -->
     <main class="main-layout">
-        <div class="upload-container">
-            
-            <!-- File Input & Drop Zone -->
-            <input type="file" id="fileInput" accept="video/mp4,video/x-m4v,video/*" />
-            
-            <div class="drop-zone" id="dropZone">
-                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04ZM14 13V17H10V13H7L12 8L17 13H14Z"/></svg>
-                <h3>Select a video to upload</h3>
-                <p>Or drag and drop it here</p>
-                <p style="margin-top: 8px; font-size: 11px;">MP4 or WebM • Max 50MB</p>
+        
+        <!-- Creator Identity Card -->
+        <div class="creator-identity">
+            <div class="creator-avatar" id="creatorAvatar">U</div>
+            <div class="creator-details">
+                <h4>Posting as</h4>
+                <h3 id="creatorName">Loading Elite Name...</h3>
             </div>
+        </div>
 
-            <!-- Video Preview -->
-            <div class="preview-container" id="previewContainer">
-                <button class="remove-video" id="removeVideoBtn" title="Remove Video">
-                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"/></svg>
-                </button>
-                <video id="videoPreview" controls playsinline></video>
-            </div>
-
-            <!-- Upload Form -->
-            <div id="uploadFormContainer" style="display: none;">
+        <div class="glass-card">
+            <form id="uploadForm">
                 <div class="form-group">
-                    <label>Caption</label>
-                    <textarea id="videoCaption" placeholder="Write a catchy caption... #trends" maxlength="150"></textarea>
+                    <label>Video Elite Link (URL)</label>
+                    <input type="url" id="vUrl" placeholder="Enter video link (Instagram, YT, or Direct)" required>
                 </div>
 
-                <!-- Progress Bar -->
-                <div class="progress-wrapper" id="progressWrapper">
-                    <div class="progress-header">
-                        <span id="progressText">Uploading...</span>
-                        <span id="progressPercent">0%</span>
+                <div class="form-group">
+                    <label>Elite Title</label>
+                    <input type="text" id="vTitle" placeholder="Give your content a title..." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Elite Description</label>
+                    <textarea id="vDesc" placeholder="Explain your elite vibe..."></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="vCategory">
+                            <option value="luxury">Luxury Life</option>
+                            <option value="trending">Trending</option>
+                            <option value="gaming">Gaming</option>
+                            <option value="community">Community</option>
+                        </select>
                     </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" id="progressFill"></div>
+                    <div class="form-group">
+                        <label>Target Audience</label>
+                        <select id="vTarget">
+                            <option value="male">Elite Male</option>
+                            <option value="female">Elite Female</option>
+                            <option value="kids">Elite Kids</option>
+                        </select>
                     </div>
                 </div>
 
-                <div id="statusMsg" class="msg-box"></div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--primary);">
+                        <input type="checkbox" style="width: 18px; height: 18px;" required>
+                        I confirm this content is 18+ safe.
+                    </label>
+                </div>
 
-                <button class="btn-primary" id="uploadBtn">Publish Video</button>
-            </div>
-
+                <button type="submit" class="btn-publish" id="publishBtn">
+                    <span>Publish to Hub</span>
+                    <div class="spinner" id="btnSpinner"></div>
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z"/></svg>
+                </button>
+            </form>
         </div>
     </main>
 
-    <!-- App Logic -->
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 10px;">Elite Published!</h2>
+            <p style="color: #64748b; font-size: 15px; margin-bottom: 30px;">Your content is now live on Nexy Hub. Start gaining elite views.</p>
+            <button class="btn-publish" onclick="window.location.href='home.html'">Return to Hub</button>
+        </div>
+    </div>
+
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-        import { collection, addDoc, doc, updateDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { auth, db, storage } from "./imp/firebase-config.js";
+        import { doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db } from "./imp/firebase-config.js";
 
-        let currentUser = null;
-        let selectedFile = null;
+        let currentEliteUser = null;
 
-        // 1. Check Authentication
+        // 1. Auth Sync
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.replace("login.html");
             } else {
-                // Fetch extra user details (username) from Firestore
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) {
-                    currentUser = userDoc.data();
-                } else {
-                    currentUser = { id: user.uid, username: "User" };
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    currentEliteUser = snap.data();
+                    document.getElementById('creatorName').innerText = currentEliteUser.name || "Elite Creator";
+                    document.getElementById('creatorAvatar').innerText = (currentEliteUser.name || "E").charAt(0).toUpperCase();
                 }
             }
         });
 
-        // 2. Inject Navigation Dock
-        async function loadNavDock() {
-            try {
-                const response = await fetch('./imp/nav-dock-button.html');
-                if (response.ok) {
-                    const html = await response.text();
-                    document.getElementById('navDockContainer').innerHTML = html;
-                    const scripts = document.getElementById('navDockContainer').getElementsByTagName('script');
-                    for (let script of scripts) eval(script.innerText);
-                }
-            } catch (error) { console.error("Nav load failed", error); }
-        }
-        loadNavDock();
-
-        // 3. UI Elements
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const previewContainer = document.getElementById('previewContainer');
-        const videoPreview = document.getElementById('videoPreview');
-        const removeVideoBtn = document.getElementById('removeVideoBtn');
-        const uploadFormContainer = document.getElementById('uploadFormContainer');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const videoCaption = document.getElementById('videoCaption');
-        const progressWrapper = document.getElementById('progressWrapper');
-        const progressFill = document.getElementById('progressFill');
-        const progressPercent = document.getElementById('progressPercent');
-        const statusMsg = document.getElementById('statusMsg');
-
-        // 4. Handle Drag & Drop Events
-        dropZone.addEventListener('click', () => fileInput.click());
-        
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
+        // 2. Publish Logic
+        const form = document.getElementById('uploadForm');
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
-        });
-
-        fileInput.addEventListener('change', function() {
-            handleFiles(this.files);
-        });
-
-        // 5. File Validation & Preview
-        function handleFiles(files) {
-            if (files.length === 0) return;
-            const file = files[0];
-
-            // Validate video type
-            if (!file.type.startsWith('video/')) {
-                showMsg('Please select a valid video file.', 'error');
-                return;
-            }
-
-            // Validate size (Max 50MB)
-            const maxSize = 50 * 1024 * 1024;
-            if (file.size > maxSize) {
-                showMsg('Video exceeds the 50MB limit.', 'error');
-                return;
-            }
-
-            selectedFile = file;
-            showMsg('', ''); // Clear messages
             
-            // Show Preview
-            const videoURL = URL.createObjectURL(file);
-            videoPreview.src = videoURL;
-            dropZone.style.display = 'none';
-            previewContainer.style.display = 'block';
-            uploadFormContainer.style.display = 'block';
-            uploadBtn.style.display = 'block';
-        }
+            const btn = document.getElementById('publishBtn');
+            const spinner = document.getElementById('btnSpinner');
+            
+            btn.children[0].style.display = 'none';
+            btn.children[2].style.display = 'none';
+            spinner.style.display = 'block';
 
-        // 6. Remove Video
-        removeVideoBtn.addEventListener('click', () => {
-            selectedFile = null;
-            videoPreview.src = "";
-            previewContainer.style.display = 'none';
-            uploadFormContainer.style.display = 'none';
-            dropZone.style.display = 'block';
-            fileInput.value = ""; // Reset input
-        });
-
-        // Message Helper
-        function showMsg(text, type) {
-            if (!text) {
-                statusMsg.style.display = 'none';
-                return;
-            }
-            statusMsg.textContent = text;
-            statusMsg.className = `msg-box ${type}-msg`;
-            statusMsg.style.display = 'block';
-        }
-
-        // 7. Handle Upload to Firebase
-        uploadBtn.addEventListener('click', async () => {
-            if (!selectedFile || !currentUser) return;
-
-            // UI changes during upload
-            uploadBtn.disabled = true;
-            removeVideoBtn.style.display = 'none';
-            progressWrapper.style.display = 'block';
-            showMsg('', '');
+            const videoData = {
+                videoURL: document.getElementById('vUrl').value,
+                title: document.getElementById('vTitle').value,
+                desc: document.getElementById('vDesc').value,
+                category: document.getElementById('vCategory').value,
+                target: document.getElementById('vTarget').value,
+                userId: currentEliteUser.uid,
+                username: currentEliteUser.name,
+                views: 0,
+                likes: 0,
+                status: 'approved', // Auto-approved for this version
+                createdAt: serverTimestamp()
+            };
 
             try {
-                // Generate a unique file name
-                const timestamp = Date.now();
-                const safeName = selectedFile.name.replace(/[^a-zA-Z0-9.]/g, "_");
-                const fileName = `videos/${currentUser.id}/${timestamp}_${safeName}`;
-                
-                // Create Storage Reference
-                const storageRef = ref(storage, fileName);
-                
-                // Start Upload Task
-                const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        // Calculate Progress
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        progressFill.style.width = progress + '%';
-                        progressPercent.innerText = Math.round(progress) + '%';
-                    }, 
-                    (error) => {
-                        console.error("Upload error:", error);
-                        showMsg('Upload failed. Please try again.', 'error');
-                        uploadBtn.disabled = false;
-                        removeVideoBtn.style.display = 'flex';
-                        progressWrapper.style.display = 'none';
-                    }, 
-                    async () => {
-                        // Upload Success - Get URL
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                        
-                        // Save Data to Firestore
-                        await saveVideoData(downloadURL);
-                    }
-                );
-
-            } catch (error) {
-                console.error("Initialization error:", error);
-                showMsg('Something went wrong.', 'error');
-                uploadBtn.disabled = false;
+                await addDoc(collection(db, "videos"), videoData);
+                document.getElementById('successModal').style.display = 'flex';
+            } catch (err) {
+                alert("Upload Failed: " + err.message);
+                btn.children[0].style.display = 'block';
+                btn.children[2].style.display = 'block';
+                spinner.style.display = 'none';
             }
         });
 
-        // 8. Save Data to Firestore Collection
-        async function saveVideoData(videoURL) {
-            try {
-                const title = videoCaption.value.trim();
-
-                // 8a. Add to "videos" collection
-                // Status is set to 'pending' to follow your admin moderation rules
-                await addDoc(collection(db, "videos"), {
-                    userId: currentUser.id,
-                    username: currentUser.username,
-                    title: title,
-                    videoURL: videoURL,
-                    thumbnail: "", // Auto-thumbnail logic can go in Cloud Functions
-                    views: 0,
-                    likes: 0,
-                    status: "pending", 
-                    createdAt: serverTimestamp()
-                });
-
-                // 8b. Update User's lastUploadDate (For Weekly Activity Rule)
-                const userRef = doc(db, "users", currentUser.id);
-                await updateDoc(userRef, {
-                    lastUploadDate: serverTimestamp(),
-                    status: "active" // Ensures they are not suspended if they just uploaded
-                });
-
-                showMsg('Video uploaded successfully! Waiting for moderation.', 'success');
-                
-                // Redirect to Profile after 2 seconds
-                setTimeout(() => {
-                    window.location.replace('profile.html');
-                }, 2000);
-
-            } catch (error) {
-                console.error("Database save error:", error);
-                showMsg('Failed to save video data.', 'error');
-                uploadBtn.disabled = false;
-            }
-        }
+        // Inject Nav & Loader
+        const inject = (url, target) => {
+            fetch(url).then(r => r.text()).then(html => {
+                document.getElementById(target).innerHTML = html;
+                const scripts = document.getElementById(target).getElementsByTagName('script');
+                for (let s of scripts) eval(s.innerText);
+            });
+        };
+        inject('./imp/nav-dock-button.html', 'navDockContainer');
+        inject('./imp/loader.html', 'loaderContainer');
     </script>
 </body>
 </html>
