@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Help & Support - Nexy Fans</title>
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Top Header */
+        .top-header {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 60px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex; align-items: center; padding: 0 20px;
+            z-index: 900; border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .back-btn {
+            background: none; border: none; cursor: pointer;
+            margin-right: 15px; display: flex; align-items: center;
+        }
+
+        .header-title { font-size: 18px; font-weight: 700; }
+
+        /* Main Layout */
+        .main-layout {
+            padding-top: 80px; padding-bottom: 100px;
+            max-width: 600px; margin: 0 auto; padding-left: 16px; padding-right: 16px;
+        }
+
+        @media (min-width: 768px) { body { padding-left: 80px; } }
+
+        /* FAQ Section */
+        .section-title {
+            font-size: 13px; font-weight: 600; color: #64748b;
+            margin: 20px 0 10px 5px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .help-card {
+            background: #ffffff; border-radius: 20px;
+            padding: 20px; margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .faq-item { margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; }
+        .faq-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+        .faq-q { font-size: 15px; font-weight: 600; margin-bottom: 6px; display: block; }
+        .faq-a { font-size: 14px; color: #64748b; line-height: 1.5; }
+
+        /* Restoration Form */
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 500; color: #475569; margin-bottom: 8px; }
+        
+        textarea, select {
+            width: 100%; padding: 14px; border-radius: 12px;
+            border: 1.5px solid #e2e8f0; background: #fdfdfd;
+            font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s;
+        }
+
+        textarea:focus { border-color: #1a1a1a; }
+
+        .btn-submit {
+            width: 100%; padding: 16px; border-radius: 14px;
+            background: #1a1a1a; color: white; border: none;
+            font-weight: 700; font-size: 15px; cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-submit:active { transform: scale(0.98); }
+
+        /* Guidelines */
+        .guideline-item {
+            display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;
+        }
+
+        .guideline-item svg { width: 18px; height: 18px; fill: #10b981; flex-shrink: 0; margin-top: 2px; }
+        .guideline-text { font-size: 14px; line-height: 1.4; color: #475569; }
+    </style>
+</head>
+<body>
+
+    <!-- Loaders & Warnings injected here via script -->
+    <div id="loaderContainer"></div>
+    <div id="warningContainer"></div>
+    <div id="navDockContainer"></div>
+
+    <header class="top-header">
+        <button class="back-btn" onclick="history.back()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </button>
+        <span class="header-title">Help Center</span>
+    </header>
+
+    <main class="main-layout">
+        
+        <!-- FAQ Section -->
+        <p class="section-title">Common Questions</p>
+        <div class="help-card">
+            <div class="faq-item">
+                <span class="faq-q">What is the 7-day rule?</span>
+                <p class="faq-a">To keep the community active, every user must upload at least one video every 7 days. Failure to do so results in automatic account suspension.</p>
+            </div>
+            <div class="faq-item">
+                <span class="faq-q">How do I restore my account?</span>
+                <p class="faq-a">If your account is suspended, use the restoration form below. Our team will review your request within 24-48 hours.</p>
+            </div>
+        </div>
+
+        <!-- Restoration Form -->
+        <p class="section-title">Account Restoration</p>
+        <div class="help-card">
+            <form id="helpForm">
+                <div class="form-group">
+                    <label>Reason for Request</label>
+                    <select id="requestType" required>
+                        <option value="suspension">Account Suspension Appeal</option>
+                        <option value="bug">Technical Issue</option>
+                        <option value="other">Other Inquiry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Explain your situation</label>
+                    <textarea id="requestMessage" placeholder="Please provide details..." rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit" id="submitBtn">Send Request</button>
+            </form>
+        </div>
+
+        <!-- Community Guidelines -->
+        <p class="section-title">Community Guidelines</p>
+        <div class="help-card">
+            <div class="guideline-item">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <p class="guideline-text">No illegal or explicit content is allowed.</p>
+            </div>
+            <div class="guideline-item">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <p class="guideline-text">Respect all members in the community chat.</p>
+            </div>
+            <div class="guideline-item">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <p class="guideline-text">User-generated videos only. Do not spam.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { auth, db } from "./imp/firebase-config.js";
+
+        let currentUid = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) currentUid = user.uid;
+        });
+
+        // 1. Inject Helpers
+        const inject = (url, target) => {
+            fetch(url).then(r => r.text()).then(html => {
+                document.getElementById(target).innerHTML = html;
+                const scripts = document.getElementById(target).getElementsByTagName('script');
+                for (let s of scripts) eval(s.innerText);
+            });
+        };
+        inject('./imp/loader.html', 'loaderContainer');
+        inject('./imp/warning.html', 'warningContainer');
+        inject('./imp/nav-dock-button.html', 'navDockContainer');
+
+        // 2. Form Submission
+        document.getElementById('helpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const type = document.getElementById('requestType').value;
+            const message = document.getElementById('requestMessage').value;
+
+            if (!currentUid) {
+                NexyShowPopup({ type: 'error', title: 'Error', message: 'You must be logged in to send a request.' });
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Sending...";
+
+            try {
+                await addDoc(collection(db, "help_requests"), {
+                    userId: currentUid,
+                    type: type,
+                    message: message,
+                    status: "pending",
+                    createdAt: serverTimestamp()
+                });
+
+                NexyShowPopup({
+                    type: 'success',
+                    title: 'Request Sent',
+                    message: 'Our team has received your request. We will review it shortly.',
+                    onConfirm: () => { window.location.href = 'home.html'; }
+                });
+
+                document.getElementById('helpForm').reset();
+            } catch (error) {
+                NexyShowPopup({ type: 'error', title: 'Error', message: 'Failed to send request. Try again.' });
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Send Request";
+            }
+        });
+    </script>
+</body>
+</html>
