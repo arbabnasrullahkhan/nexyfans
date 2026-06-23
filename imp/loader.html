@@ -1,0 +1,130 @@
+<!-- imp/loader.html -->
+<style>
+    /* Global Loader Overlay */
+    #nexy-loader-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000; /* Always on top */
+        transition: opacity 0.5s ease, visibility 0.5s;
+    }
+
+    /* Minimalist Pulse Animation */
+    .loader-pulse {
+        width: 60px;
+        height: 60px;
+        background: #1a1a1a;
+        border-radius: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: pulseScale 1.5s infinite ease-in-out;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .loader-pulse svg {
+        width: 30px;
+        height: 30px;
+        fill: #ffffff;
+    }
+
+    @keyframes pulseScale {
+        0% { transform: scale(0.9); opacity: 0.8; }
+        50% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
+    /* Offline Banner */
+    #offline-banner {
+        position: fixed;
+        top: -100px;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        background: #ef4444;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 600;
+        z-index: 10001;
+        transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    }
+
+    #offline-banner.visible {
+        top: 0;
+    }
+
+    #offline-banner svg {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        fill: white;
+    }
+
+    /* Utility to hide loader */
+    .loader-hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+</style>
+
+<!-- The Loader UI -->
+<div id="nexy-loader-wrapper">
+    <div class="loader-pulse">
+        <svg viewBox="0 0 24 24"><path d="M8 5.14V18.86C8 19.75 8.97 20.29 9.72 19.82L20.59 13.06C21.28 12.63 21.28 11.64 20.59 11.21L9.72 4.45C8.97 3.98 8 4.52 8 5.14Z"/></svg>
+    </div>
+</div>
+
+<!-- The Offline UI -->
+<div id="offline-banner">
+    <svg viewBox="0 0 24 24"><path d="M23.64 7c-.45-.34-4.93-4-11.64-4C5.28 3 .81 6.66.36 7l.35.44L12 21.5l11.29-14.05.35-.45zM12 4c4.13 0 7.39 1.84 9.13 2.93L12 18.23 2.87 6.93C4.61 5.84 7.87 4 12 4z"/></svg>
+    No Internet Connection
+</div>
+
+<script>
+    (function() {
+        const loader = document.getElementById('nexy-loader-wrapper');
+        const offline = document.getElementById('offline-banner');
+
+        // 1. Hide Loader when Page is fully ready
+        window.addEventListener('load', () => {
+            // Small timeout to ensure visual smoothness
+            setTimeout(() => {
+                loader.classList.add('loader-hidden');
+            }, 600);
+        });
+
+        // 2. Connectivity Listeners
+        function updateOnlineStatus() {
+            if (navigator.onLine) {
+                offline.classList.remove('visible');
+            } else {
+                offline.classList.add('visible');
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Check immediately on load
+        updateOnlineStatus();
+
+        // 3. Fail-safe: Force hide loader after 8 seconds (to prevent infinite loading)
+        setTimeout(() => {
+            if (!loader.classList.contains('loader-hidden')) {
+                loader.classList.add('loader-hidden');
+                console.warn("Loader forced to hide due to timeout.");
+            }
+        }, 8000);
+    })();
+</script>
